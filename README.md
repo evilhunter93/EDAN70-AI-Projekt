@@ -1,1 +1,1 @@
-# EDAN70-AI-Projekt
+# EDAN70 - AI Projekt
