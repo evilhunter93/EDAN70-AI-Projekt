@@ -8,5 +8,6 @@ namespace Tak.GUI
 {
     class Class1
     {
+        int Number { get; }
     }
 }
