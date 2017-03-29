@@ -15,12 +15,18 @@ namespace Tak.Game
     {
         int nbrCapStones;
         int nbrFlatStones;
-        private Colour colour;
+        Colour colour;
 
-        public virtual void DoMove()
+        public Colour Colour { get { return colour; } }
+
+        protected Player(Colour colour, int nbrCapStones, int nbrFlatStones)
         {
-            // Default?
+            this.colour = colour;
+            this.nbrCapStones = nbrCapStones;
+            this.nbrFlatStones = nbrFlatStones;
         }
+
+        public abstract void DoMove();
 
         public int GetNbrCapStones()
         {

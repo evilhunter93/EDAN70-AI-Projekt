@@ -44,12 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\AI.cs" />
-    <Compile Include="Game\AI.cs" />
+    <Compile Include="Game\AIPlayer.cs" />
     <Compile Include="Game\Capstone.cs" />
     <Compile Include="Game\Flatstone.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\GameBoard.cs" />
-    <Compile Include="Game\Human.cs" />
+    <Compile Include="Game\HumanPlayer.cs" />
     <Compile Include="Game\Interpreter.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\Stone.cs" />
