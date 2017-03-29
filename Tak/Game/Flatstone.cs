@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tak.Game
 {
-    class Flatstone
+    class Flatstone:Stone
     {
     }
 }
