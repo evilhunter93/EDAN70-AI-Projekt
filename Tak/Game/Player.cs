@@ -6,7 +6,24 @@ using System.Threading.Tasks;
 
 namespace Tak.Game
 {
-    class Player
+    abstract class Player
     {
+        int nbrCapStones;
+        int nbrFlatStones;
+
+        public virtual void doMove()
+        {
+            // Default?
+        }
+
+        public int getNbrCapStones()
+        {
+            return nbrCapStones;
+        }
+
+        public int getNbrFlatStones()
+        {
+            return nbrFlatStones;
+        }
     }
 }
