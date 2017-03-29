@@ -17,17 +17,17 @@ namespace Tak.Game
         int nbrFlatStones;
         private Colour colour;
 
-        public virtual void doMove()
+        public virtual void DoMove()
         {
             // Default?
         }
 
-        public int getNbrCapStones()
+        public int GetNbrCapStones()
         {
             return nbrCapStones;
         }
 
-        public int getNbrFlatStones()
+        public int GetNbrFlatStones()
         {
             return nbrFlatStones;
         }

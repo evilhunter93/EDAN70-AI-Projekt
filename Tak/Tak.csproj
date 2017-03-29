@@ -56,7 +56,6 @@
     <Compile Include="Game\StoneStack.cs" />
     <Compile Include="GUI\Class1.cs" />
     <Compile Include="LocalTest.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

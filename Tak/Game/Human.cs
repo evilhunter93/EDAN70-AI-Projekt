@@ -8,13 +8,18 @@ namespace Tak.Game
 {
     class Human : Player
     {
-        public override void doMove()
+        public override void DoMove()
+        {
+            string move = PromptInput();
+            Console.WriteLine("\nYour input was [{0}]", move);
+        }
+
+        private string PromptInput()
         {
             Console.WriteLine("\nYour turn!");
             Console.Write("Enter move: ");
 
-            string move = Console.ReadLine();
-            Console.WriteLine("\nYour input was [{0}]", move);
+            return Console.ReadLine();
         }
     }
 }
