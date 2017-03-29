@@ -24,6 +24,7 @@ namespace Tak.Game
             }
             else if (stones.Peek().Standing == false)
             {
+                stones.Push(stone);
                 return true;
             }
             else
