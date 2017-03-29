@@ -18,7 +18,6 @@ namespace Tak.Game
         {
             Console.WriteLine("\nYour turn!");
             Console.Write("Enter move: ");
-
             return Console.ReadLine();
         }
     }
