@@ -14,8 +14,6 @@ namespace Tak.Game
         {
             string move = PromptInput();
             //Console.WriteLine("\nYour input was [{0}]", move);
-
-
         }
 
         private string PromptInput()
