@@ -9,5 +9,7 @@ namespace Tak.Game
     abstract class Stone
     {
         private bool standing;
+
+        public bool Standing { get; }
     }
 }
