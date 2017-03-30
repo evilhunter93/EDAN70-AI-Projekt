@@ -17,7 +17,7 @@ namespace Tak.Game
             stones = new Stack<Stone>();
         }
 
-        public bool addStone(Stone stone)
+        public bool AddStone(Stone stone)
         {
             if (stone is Capstone || stones.Count == 0)
             {
@@ -35,7 +35,7 @@ namespace Tak.Game
             }
         }
 
-        public bool removeStone()
+        public bool RemoveStone()
         {
             if (stones.Count != 0)
             {
@@ -45,12 +45,12 @@ namespace Tak.Game
             return false;
         }
 
-        public StoneStack separate(int nbr)
+        public StoneStack Separate(int nbr)
         {
             StoneStack temp = new StoneStack();
             for (int i = 0; i < nbr; i++)
             {
-                temp.addStone(stones.Pop());
+                temp.AddStone(stones.Pop());
             }
             return temp;
         }

@@ -56,7 +56,7 @@ namespace Tak.Game
             if (amount > stacks[x, y].Count)
                 throw new IllegalMoveException("\nCould not pick up " + amount + " stones, stack contains " + stacks[x, y].Count);
 
-            StoneStack pickedUp = stacks[x, y].separate(amount);
+            StoneStack pickedUp = stacks[x, y].Separate(amount);
             return pickedUp;
         }
 
