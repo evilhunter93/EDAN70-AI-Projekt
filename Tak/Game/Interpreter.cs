@@ -18,6 +18,8 @@ namespace Tak.Game
         public void input(String input)
         {
             Stone stoneType;
+            int x;
+            int y;
             int charCount = 0;
             foreach (var ch in input)
             {
@@ -38,6 +40,14 @@ namespace Tak.Game
                             stoneType = new Flatstone();
                             break;
                     }
+                }
+                if (charCount == 2)
+                {
+                    x = ch - 'a';
+                }
+                else if (charCount == 3)
+                {
+                    y = ch;
                 }
             }
         }
