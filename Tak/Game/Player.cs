@@ -18,6 +18,8 @@ namespace Tak.Game
         Colour colour;
 
         public Colour Colour { get { return colour; } }
+        public int NbrCapStones { get { return nbrCapStones; } }
+        public int NbrFlatStones { get { return nbrFlatStones; } }
 
         protected Player(Colour colour, int nbrCapStones, int nbrFlatStones)
         {
@@ -27,15 +29,5 @@ namespace Tak.Game
         }
 
         public abstract void DoMove();
-
-        public int GetNbrCapStones()
-        {
-            return nbrCapStones;
-        }
-
-        public int GetNbrFlatStones()
-        {
-            return nbrFlatStones;
-        }
     }
 }
