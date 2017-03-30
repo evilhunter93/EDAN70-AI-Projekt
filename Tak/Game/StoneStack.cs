@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tak.Game
 {
-    class StoneStack
+    public class StoneStack
     {
         private Stack<Stone> stones;
 

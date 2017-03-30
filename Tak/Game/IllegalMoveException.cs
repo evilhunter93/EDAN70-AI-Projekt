@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tak.Game
 {
-    class IllegalMoveException : Exception
+    public class IllegalMoveException : Exception
     {
         public IllegalMoveException(string message) : base(message) { }
     }

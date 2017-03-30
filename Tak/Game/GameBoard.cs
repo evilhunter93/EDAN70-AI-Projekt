@@ -7,7 +7,7 @@ using Tak.Utilities;
 
 namespace Tak.Game
 {
-    class GameBoard
+    public class GameBoard
     {
         public const int UNSPECIFIED = -1;
         private int size;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tak.Game
 {
-    abstract class Stone
+    public abstract class Stone
     {
         private bool standing;
 

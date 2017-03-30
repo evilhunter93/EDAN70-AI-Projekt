@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tak.Game
 {
-    class Flatstone : Stone
+    public class Flatstone : Stone
     {
         private bool standing = false;
 
