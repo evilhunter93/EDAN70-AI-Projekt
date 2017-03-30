@@ -58,8 +58,6 @@
     <Compile Include="GUI\Class1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\TestClone.cs" />
-    <Compile Include="Utilities\CloneUtility.cs" />
     <Compile Include="Utilities\ObjectExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

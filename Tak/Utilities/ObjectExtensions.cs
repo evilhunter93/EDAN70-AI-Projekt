@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using System.ArrayExtensions;
+using Tak.Utilities.ArrayExtensions;
+using System;
 
-namespace System
+namespace Tak.Utilities
 {
     public static class ObjectExtensions
     {
