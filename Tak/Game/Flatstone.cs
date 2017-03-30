@@ -10,7 +10,7 @@ namespace Tak.Game
     {
         private bool standing = false;
 
-        public new bool Standing { get; set; }
+        public override bool Standing { get; set; }
 
     }
 }

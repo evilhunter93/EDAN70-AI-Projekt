@@ -9,5 +9,18 @@ namespace Tak.Game
     class Capstone : Stone
     {
         private bool standing = true;
+
+        public override bool Standing
+        {
+            get
+            {
+                return standing;
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
