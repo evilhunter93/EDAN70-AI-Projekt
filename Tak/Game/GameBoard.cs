@@ -22,7 +22,7 @@ namespace Tak.Game
                 {
                     for (int y = 0; y < size; y++)
                     {
-                        tempStacks[x, y] = CloneUtility.CloneObject(stacks[x, y]) as StoneStack;
+                        tempStacks[x, y] = ObjectExtensions.Copy(stacks[x, y]);
                     }
                 }
                 return tempStacks;
@@ -34,10 +34,31 @@ namespace Tak.Game
         {
             this.size = size;
             stacks = new StoneStack[size, size];
+            for (int x = 0; x < size; x++)
+                for (int y = 0; y < size; y++)
+                    stacks[x, y] = new StoneStack();
         }
 
         public bool PlaceStone(int x, int y, Stone stone, bool existing = false)
         {
+            CheckIndex(x, y);
+
+            if (stacks[x, y].Count == 0)
+            {
+                stacks[x, y].AddStone(stone);
+                return true;
+            }
+            else
+            {
+                if (!existing)
+                {
+                    throw new IllegalMoveException("\nCan not place new stone on an occupied space.");
+                }
+                else
+                {
+                    // Todo
+                }
+            }
             return false;
         }
 
