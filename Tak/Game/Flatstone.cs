@@ -8,9 +8,8 @@ namespace Tak.Game
 {
     public class Flatstone : Stone
     {
-        private bool standing = false;
+        public override bool Standing { set { standing = value; } }
 
-        public override bool Standing { get; set; }
-
+        public Flatstone(Colour c) : base(c, false) { }
     }
 }

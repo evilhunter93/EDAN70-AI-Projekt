@@ -8,8 +8,21 @@ namespace Tak.Game
 {
     public abstract class Stone
     {
-        private bool standing;
+        private Colour colour;
+        protected bool standing;
 
-        public abstract bool Standing { get; set; }
+        public Colour Colour { get { return colour; } }
+
+        public virtual bool Standing
+        {
+            get { return standing; }
+            set { /* FIXME: don't want set here */ }
+        }
+
+        protected Stone(Colour colour, bool standing)
+        {
+            this.colour = colour;
+            this.standing = standing;
+        }
     }
 }

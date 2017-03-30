@@ -8,19 +8,7 @@ namespace Tak.Game
 {
     public class Capstone : Stone
     {
-        private bool standing = true;
-
-        public override bool Standing
-        {
-            get
-            {
-                return standing;
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public Capstone(Colour c) : base(c, true) { }
     }
 }
+

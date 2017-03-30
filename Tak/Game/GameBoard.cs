@@ -39,27 +39,20 @@ namespace Tak.Game
                     stacks[x, y] = new StoneStack();
         }
 
-        public bool PlaceStone(int x, int y, Stone stone, bool existing = false)
+        //FIXME: Move StoneStack-relevant error checks to StoneStack, keep others in GameBoard
+        public void PlaceStone(int x, int y, Stone stone, bool existing = false)
         {
             CheckIndex(x, y);
 
-            if (stacks[x, y].Count == 0)
-            {
-                stacks[x, y].AddStone(stone);
-                return true;
-            }
-            else
+            if (stacks[x, y].Count > 0)
             {
                 if (!existing)
-                {
                     throw new IllegalMoveException("\nCan not place new stone on an occupied space.");
-                }
-                else
-                {
-                    // Todo
-                }
+                else if (stacks[x, y].Top is Capstone || stone is Flatstone && stacks[x, y].Top.Standing)
+                    throw new IllegalMoveException("\nCan not move Flatstone onto standing stone.");
             }
-            return false;
+
+            stacks[x, y].AddStone(stone);
         }
 
         public StoneStack PickUpStack(int x, int y, int amount = UNSPECIFIED)
@@ -73,7 +66,7 @@ namespace Tak.Game
                 else
                     amount = 1;
             }
-
+            //TODO: Add game board size check
             if (amount > stacks[x, y].Count)
                 throw new IllegalMoveException("\nCould not pick up " + amount + " stones, stack contains " + stacks[x, y].Count);
 

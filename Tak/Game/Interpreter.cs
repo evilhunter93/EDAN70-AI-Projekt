@@ -29,15 +29,15 @@ namespace Tak.Game
                     switch (ch)
                     {
                         case 'S':
-                            stoneType = new Flatstone();
+                            stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
                             stoneType.Standing = true;
                             break;
                         case 'C':
-                            stoneType = new Capstone();
+                            stoneType = new Capstone(Colour.Black); // FIXME: Turn decides colour
                             break;
                         default:
                             charCount = 2;
-                            stoneType = new Flatstone();
+                            stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
                             break;
                     }
                 }

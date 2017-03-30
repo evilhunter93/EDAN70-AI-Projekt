@@ -10,6 +10,10 @@ namespace Tak.Game
     {
         private Stack<Stone> stones;
 
+        public Colour Owner { get { return stones.Peek().Colour; } }
+
+        public Stone Top { get { return stones.Peek(); } }
+
         public int Count { get { return stones.Count; } }
 
         public StoneStack()
@@ -19,12 +23,14 @@ namespace Tak.Game
 
         public bool AddStone(Stone stone)
         {
-            if (stone is Capstone || stones.Count == 0)
+            if (stone is Capstone)
             {
+                if (Count > 0)
+                    stones.Peek().Standing = false;
                 stones.Push(stone);
                 return true;
             }
-            else if (stones.Peek().Standing == false)
+            else if (stones.Count == 0 || stones.Peek().Standing == false)
             {
                 stones.Push(stone);
                 return true;
