@@ -34,7 +34,7 @@ namespace Tak.Game
                             stoneType = new Capstone();
                             break;
                         default:
-                            charCount = 1;
+                            charCount = 2;
                             stoneType = new Flatstone();
                             break;
                     }
