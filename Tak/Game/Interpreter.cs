@@ -21,7 +21,8 @@ namespace Tak.Game
             int charCount = 0;
             foreach (var ch in input)
             {
-                if (charCount == 0)
+                charCount++;
+                if (charCount == 1)
                 {
                     switch (ch)
                     {
