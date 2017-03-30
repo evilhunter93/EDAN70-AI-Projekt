@@ -10,6 +10,8 @@ namespace Tak.Game
     {
         private Stack<Stone> stones;
 
+        public int Count { get { return stones.Count; } }
+
         public StoneStack()
         {
             stones = new Stack<Stone>();
