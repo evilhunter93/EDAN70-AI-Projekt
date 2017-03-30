@@ -56,7 +56,9 @@
     <Compile Include="Game\Stone.cs" />
     <Compile Include="Game\StoneStack.cs" />
     <Compile Include="GUI\Class1.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\CloneUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
