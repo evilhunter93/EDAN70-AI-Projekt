@@ -66,10 +66,10 @@ namespace Tak.Game
                 else
                     amount = 1;
             }
-            //TODO: Add game board size check
-            if (amount > stacks[x, y].Count)
+            if (amount > stacks[x, y].Count || amount > size)
                 throw new IllegalMoveException("\nCould not pick up " + amount + " stones, stack contains " + stacks[x, y].Count);
-
+            if (amount > size)
+                throw new IllegalMoveException("\nCould not pick up " + amount + " stones, the size of the gameboard is " + size);
             StoneStack pickedUp = stacks[x, y].Separate(amount);
             return pickedUp;
         }
