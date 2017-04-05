@@ -108,6 +108,10 @@ namespace Tak.Game
                     }
                 }
             }
+            else
+            {
+                boardModel.PlaceStone(x, y, stoneType);
+            }
         }
     }
 }
