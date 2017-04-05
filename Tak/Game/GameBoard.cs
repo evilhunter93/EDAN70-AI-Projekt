@@ -39,20 +39,15 @@ namespace Tak.Game
                     stacks[x, y] = new StoneStack();
         }
 
-        //FIXME: Move StoneStack-relevant error checks to StoneStack, keep others in GameBoard
         public void PlaceStone(int x, int y, Stone stone, bool existing = false)
         {
             CheckIndex(x, y);
 
-            if (stacks[x, y].Count > 0)
-            {
-                if (!existing)
-                    throw new IllegalMoveException("\nCan not place new stone on an occupied space.");
-                else if (stacks[x, y].Top is Capstone || stone is Flatstone && stacks[x, y].Top.Standing)
-                    throw new IllegalMoveException("\nCan not move Flatstone onto standing stone.");
-            }
+            if (existing)
+                stacks[x, y].AddStone(stone);
+            else
+                stacks[x, y].NewStone(stone);
 
-            stacks[x, y].AddStone(stone);
         }
 
         public StoneStack PickUpStack(int x, int y, int amount = UNSPECIFIED)
@@ -66,10 +61,10 @@ namespace Tak.Game
                 else
                     amount = 1;
             }
-            if (amount > stacks[x, y].Count)
-                throw new IllegalMoveException("\nCould not pick up " + amount + " stones, stack contains " + stacks[x, y].Count);
+
             if (amount > size)
                 throw new IllegalMoveException("\nCould not pick up " + amount + " stones, the size of the gameboard is " + size);
+
             StoneStack pickedUp = stacks[x, y].Separate(amount);
             return pickedUp;
         }
@@ -78,11 +73,6 @@ namespace Tak.Game
         {
             if (x < 0 || x >= size || y < 0 || y >= size)
                 throw new IllegalMoveException("\nIndex [" + x + ", " + y + "] is out of bounds");
-        }
-
-        public object Clone()
-        {
-            throw new NotImplementedException();
         }
     }
 }

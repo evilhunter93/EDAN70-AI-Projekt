@@ -21,24 +21,30 @@ namespace Tak.Game
             stones = new Stack<Stone>();
         }
 
-        public bool AddStone(Stone stone)
+        public void NewStone(Stone stone)
         {
-            if (stone is Capstone)
-            {
-                if (Count > 0)
-                    stones.Peek().Standing = false;
-                stones.Push(stone);
-                return true;
-            }
-            else if (stones.Count == 0 || stones.Peek().Standing == false)
-            {
-                stones.Push(stone);
-                return true;
-            }
+            if (Count > 0)
+                throw new IllegalMoveException("\nCan not place new stone on an occupied space.");
             else
+                stones.Push(stone);
+        }
+
+        public void AddStone(Stone stone)
+        {
+            if (Top is Capstone)
+                throw new IllegalMoveException("\nCan not place stone on capstone.");
+
+            if (Count > 0)
             {
-                return false;
+                if (!(stone is Capstone))
+                {
+                    if (Top.Standing)
+                        throw new IllegalMoveException("\nCan not place non-capstone on standingstone.");
+                }
+                else
+                    stones.Peek().Standing = false;
             }
+            stones.Push(stone);
         }
 
         public bool RemoveStone()
@@ -53,6 +59,9 @@ namespace Tak.Game
 
         public StoneStack Separate(int nbr)
         {
+            if (nbr > Count)
+                throw new IllegalMoveException("\nCould not pick up " + nbr + " stones, stack contains " + Count);
+
             StoneStack temp = new StoneStack();
             for (int i = 0; i < nbr; i++)
             {
