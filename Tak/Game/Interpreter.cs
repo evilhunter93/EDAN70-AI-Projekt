@@ -22,33 +22,33 @@ namespace Tak.Game
             int y;
             int charCount = 0;
             char ch;
+            ch = input[charCount];
+            //todo Check correct length
+            switch (ch)
+            {
+                case 'S':
+                    charCount++;
+                    stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
+                    stoneType.Standing = true;
+                    break;
+                case 'C':
+                    charCount++;
+                    stoneType = new Capstone(Colour.Black); // FIXME: Turn decides colour
+                    break;
+                default:
+                    stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
+                    break;
+            }
+            ch = input[charCount];
+            x = ch - ('a' - '0');
+            ch = input[charCount++];
+            y = ch;
             bool ml = input.Contains("<");
             bool mr = input.Contains(">");
             bool mu = input.Contains("+");
             bool md = input.Contains("-");
             if (ml || mr || mu || md)
-            //todo Check correct length
             {
-                ch = input[charCount];
-                switch (ch)
-                {
-                    case 'S':
-                        charCount++;
-                        stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
-                        stoneType.Standing = true;
-                        break;
-                    case 'C':
-                        charCount++;
-                        stoneType = new Capstone(Colour.Black); // FIXME: Turn decides colour
-                        break;
-                    default:
-                        stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
-                        break;
-                }
-                ch = input[charCount];
-                x = ch - ('a' - '0');
-                ch = input[charCount++];
-                y = ch;
                 ch = input[charCount += 2];
                 String stackPlace = input.Substring(charCount);
                 int amount = 0;
@@ -64,9 +64,46 @@ namespace Tak.Game
                     foreach (var n in stackPlace)
                     {
                         x--;
+                        StoneStack mStack = stack.Separate(n);
                         for (int j = 0; j < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, stack.popStone());
+                            boardModel.PlaceStone(x, y, mStack.PopStone());
+                        }
+                    }
+                }
+                else if (mr)
+                {
+                    foreach (var n in stackPlace)
+                    {
+                        x--;
+                        StoneStack mStack = stack.Separate(n);
+                        for (int j = 0; j < n; j++)
+                        {
+                            boardModel.PlaceStone(x, y, mStack.PopStone());
+                        }
+                    }
+                }
+                else if (mu)
+                {
+                    foreach (var n in stackPlace)
+                    {
+                        x--;
+                        StoneStack mStack = stack.Separate(n);
+                        for (int j = 0; j < n; j++)
+                        {
+                            boardModel.PlaceStone(x, y, mStack.PopStone());
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var n in stackPlace)
+                    {
+                        x--;
+                        StoneStack mStack = stack.Separate(n);
+                        for (int j = 0; j < n; j++)
+                        {
+                            boardModel.PlaceStone(x, y, mStack.PopStone());
                         }
                     }
                 }
