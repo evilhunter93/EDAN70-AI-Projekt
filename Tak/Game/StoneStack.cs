@@ -47,14 +47,12 @@ namespace Tak.Game
             stones.Push(stone);
         }
 
-        public bool RemoveStone()
+        public Stone PopStone()
         {
-            if (stones.Count != 0)
-            {
-                stones.Pop();
-                return true;
-            }
-            return false;
+            if (stones.Count == 0)
+                throw new IllegalMoveException("\nCan not pop from empty StoneStack.");
+            else
+                return stones.Pop();
         }
 
         public StoneStack Separate(int nbr)
