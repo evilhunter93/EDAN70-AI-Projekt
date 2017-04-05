@@ -40,14 +40,27 @@ namespace Tak.Game
                     break;
             }
             ch = input[charCount];
-            x = ch - ('a' - '0');
+            if ((ch > 'z') || (ch < 'a'))
+            {
+                //exception
+            }
+            x = (ch - 'a') - '0';
             ch = input[charCount++];
             y = ch;
             bool ml = input.Contains("<");
             bool mr = input.Contains(">");
             bool mu = input.Contains("+");
             bool md = input.Contains("-");
-            if (ml || mr || mu || md)
+            bool m = ml || mr || mu || md;
+            if (m && (input.Length < 4))
+            {
+                //exception
+            }
+            if (m && stoneType.Standing)
+            {
+                //exception
+            }
+            if (m)
             {
                 ch = input[charCount += 2];
                 String stackPlace = input.Substring(charCount);
@@ -75,7 +88,7 @@ namespace Tak.Game
                 {
                     foreach (var n in stackPlace)
                     {
-                        x--;
+                        x++;
                         StoneStack mStack = stack.Separate(n);
                         for (int j = 0; j < n; j++)
                         {
@@ -87,7 +100,7 @@ namespace Tak.Game
                 {
                     foreach (var n in stackPlace)
                     {
-                        x--;
+                        y++;
                         StoneStack mStack = stack.Separate(n);
                         for (int j = 0; j < n; j++)
                         {
@@ -99,7 +112,7 @@ namespace Tak.Game
                 {
                     foreach (var n in stackPlace)
                     {
-                        x--;
+                        y--;
                         StoneStack mStack = stack.Separate(n);
                         for (int j = 0; j < n; j++)
                         {
@@ -110,6 +123,10 @@ namespace Tak.Game
             }
             else
             {
+                if (input.Length > 3 || (input.Length > 2 && stoneType.Standing))
+                {
+                    //exception
+                }
                 boardModel.PlaceStone(x, y, stoneType);
             }
         }
