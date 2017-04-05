@@ -22,7 +22,11 @@ namespace Tak.Game
             int y;
             int charCount = 0;
             char ch;
-            if (input.Contains("<"))
+            bool ml = input.Contains("<");
+            bool mr = input.Contains(">");
+            bool mu = input.Contains("+");
+            bool md = input.Contains("-");
+            if (ml || mr || mu || md)
             //todo Check correct length
             {
                 ch = input[charCount];
@@ -42,45 +46,29 @@ namespace Tak.Game
                         break;
                 }
                 ch = input[charCount];
-                x = ch - 'a';
+                x = ch - ('a' - '0');
                 ch = input[charCount++];
                 y = ch;
                 ch = input[charCount += 2];
-
-            }
-            if (input.Contains(">"))
-                ;
-            if (input.Contains("+"))
-                ;
-            if (input.Contains("-"))
-                ;
-            foreach (var ch in input)
-            {
-                charCount++;
-                if (charCount == 1)
+                String stackPlace = input.Substring(charCount);
+                int amount = 0;
+                int[] move = new int[stackPlace.Length];
+                int k = 0;
+                foreach (var i in stackPlace)
                 {
-                    switch (ch)
+                    amount += i;
+                }
+                StoneStack stack = boardModel.PickUpStack(x, y, amount);
+                if (ml)
+                {
+                    foreach (var n in stackPlace)
                     {
-                        case 'S':
-                            stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
-                            stoneType.Standing = true;
-                            break;
-                        case 'C':
-                            stoneType = new Capstone(Colour.Black); // FIXME: Turn decides colour
-                            break;
-                        default:
-                            charCount = 2;
-                            stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
-                            break;
+                        x--;
+                        for (int j = 0; j < n; j++)
+                        {
+                            boardModel.PlaceStone(x, y, stack.popStone());
+                        }
                     }
-                }
-                if (charCount == 2)
-                {
-                    x = ch - 'a';
-                }
-                else if (charCount == 3)
-                {
-                    y = ch;
                 }
             }
         }
