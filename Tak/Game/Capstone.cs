@@ -11,4 +11,3 @@ namespace Tak.Game
         public Capstone(Colour c) : base(c, true) { }
     }
 }
-
