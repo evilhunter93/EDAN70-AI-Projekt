@@ -21,6 +21,39 @@ namespace Tak.Game
             int x;
             int y;
             int charCount = 0;
+            char ch;
+            if (input.Contains("<"))
+            //todo Check correct length
+            {
+                ch = input[charCount];
+                switch (ch)
+                {
+                    case 'S':
+                        charCount++;
+                        stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
+                        stoneType.Standing = true;
+                        break;
+                    case 'C':
+                        charCount++;
+                        stoneType = new Capstone(Colour.Black); // FIXME: Turn decides colour
+                        break;
+                    default:
+                        stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
+                        break;
+                }
+                ch = input[charCount];
+                x = ch - 'a';
+                ch = input[charCount++];
+                y = ch;
+                ch = input[charCount += 2];
+
+            }
+            if (input.Contains(">"))
+                ;
+            if (input.Contains("+"))
+                ;
+            if (input.Contains("-"))
+                ;
             foreach (var ch in input)
             {
                 charCount++;
