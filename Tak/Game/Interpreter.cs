@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tak.Exceptions;
 
 namespace Tak.Game
 {
@@ -132,10 +133,5 @@ namespace Tak.Game
                 boardModel.PlaceStone(x, y, stoneType);
             }
         }
-        private class IllegalInputException : Exception
-        {
-            public IllegalInputException(string message) : base(message) { }
-        }
     }
-
 }
