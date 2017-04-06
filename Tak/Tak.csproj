@@ -53,7 +53,6 @@
     <Compile Include="Game\IllegalMoveException.cs" />
     <Compile Include="Game\Interpreter.cs" />
     <Compile Include="Game\Player.cs" />
-    <Compile Include="Game\RoadFinder.cs" />
     <Compile Include="Game\Stone.cs" />
     <Compile Include="Game\StoneStack.cs" />
     <Compile Include="GUI\Class1.cs" />

@@ -17,6 +17,7 @@ namespace Tak.Game
         public const int UNSPECIFIED = -1;
         private int size;
         private StoneStack[,] stacks;
+        private bool[,] visited;
         private Colour turn;
         private GameState state;
 
@@ -90,7 +91,8 @@ namespace Tak.Game
 
         private void UpdateGameState()
         {
-            if (FullBoard())
+            state = Search();
+            if (state == GameState.InProgress && FullBoard())
             {
                 int nbrWhite = 0, nbrBlack = 0;
                 for (int i = 0; i < size; i++)
@@ -109,23 +111,56 @@ namespace Tak.Game
                 else
                     state = GameState.Tie;
             }
-            else if (RoadExists())
-            {
-                // TODO
-            }
-            else
-            {
-                state = GameState.InProgress;
-            }
-
-
-
         }
 
-        private bool RoadExists()
+        private GameState Search()
         {
-            // TODO
-            throw new NotImplementedException();
+            visited = new bool[size, size];
+
+            bool WR = false, BR = false;
+            for (int i = 0; i < size; i++)
+            {
+                if (ExploreRoad(0, i, 0, i))
+                {
+                    WR = WR || (stacks[0, i].Owner == Colour.White);
+                    BR = BR || (stacks[0, i].Owner == Colour.Black);
+                }
+                if (ExploreRoad(i, 0, i, 0))
+                {
+                    WR = WR || (stacks[i, 0].Owner == Colour.White);
+                    BR = BR || (stacks[i, 0].Owner == Colour.Black);
+                }
+            }
+
+            if (WR && BR)
+                return GameState.Tie;
+
+            if (WR || BR)
+                return WR ? GameState.WR : GameState.BR;
+
+            return GameState.InProgress;
+        }
+
+        private bool ExploreRoad(int x0, int y0, int x, int y)
+        {
+            if (x < 0 || x >= size || y < 0 || y >= size)
+                return false;
+
+            if (stacks[x0, y0].Owner != stacks[x, y].Owner)
+                return false;
+
+            if (visited[x, y])
+                return false;
+
+            visited[x, y] = true;
+
+            if (Math.Abs(x - x0) == (size - 1) || Math.Abs(y - y0) == (size - 1)) // Opposite side reached
+                return true;
+
+            return ExploreRoad(x0, y0, x + 1, y)
+                || ExploreRoad(x0, y0, x, y + 1)
+                || ExploreRoad(x0, y0, x - 1, y)
+                || ExploreRoad(x0, y0, x, y - 1);
         }
 
         private bool FullBoard()
