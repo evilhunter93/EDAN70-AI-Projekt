@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\AI.cs" />
+    <Compile Include="Exceptions\IllegalInputException.cs" />
     <Compile Include="Game\AIPlayer.cs" />
     <Compile Include="Game\Capstone.cs" />
     <Compile Include="Game\Flatstone.cs" />

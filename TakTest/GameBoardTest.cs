@@ -119,11 +119,15 @@ namespace TakTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(IllegalMoveException))]
         public void InputStone()
         {
             int size = 5;
             GameBoard board = new GameBoard(size);
-
+            board.Turn = Colour.Black;
+            Interpreter parser = new Interpreter(board);
+            parser.input("a1");
+            board.PlaceStone(0, 0, new Flatstone(Colour.Black));
         }
     }
 }

@@ -7,7 +7,7 @@ using Tak.Exceptions;
 
 namespace Tak.Game
 {
-    class Interpreter
+    public class Interpreter
     {
         private GameBoard boardModel;
 
@@ -47,7 +47,7 @@ namespace Tak.Game
             }
             x = (ch - 'a') - '0';
             ch = input[charCount++];
-            y = ch;
+            y = ch - 1;
             bool ml = input.Contains("<");
             bool mr = input.Contains(">");
             bool mu = input.Contains("+");
@@ -69,7 +69,6 @@ namespace Tak.Game
                 String stackPlace = input.Substring(charCount);
                 int amount = 0;
                 int[] move = new int[stackPlace.Length];
-                int k = 0;
                 foreach (var i in stackPlace)
                 {
                     amount += i;
@@ -91,10 +90,9 @@ namespace Tak.Game
                     foreach (var n in stackPlace)
                     {
                         x++;
-                        StoneStack mStack = stack.Separate(n);
                         for (int j = 0; j < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, mStack.PopStone());
+                            boardModel.PlaceStone(x, y, stack.PopStone());
                         }
                     }
                 }
@@ -103,10 +101,9 @@ namespace Tak.Game
                     foreach (var n in stackPlace)
                     {
                         y++;
-                        StoneStack mStack = stack.Separate(n);
                         for (int j = 0; j < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, mStack.PopStone());
+                            boardModel.PlaceStone(x, y, stack.PopStone());
                         }
                     }
                 }
@@ -115,17 +112,16 @@ namespace Tak.Game
                     foreach (var n in stackPlace)
                     {
                         y--;
-                        StoneStack mStack = stack.Separate(n);
                         for (int j = 0; j < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, mStack.PopStone());
+                            boardModel.PlaceStone(x, y, stack.PopStone());
                         }
                     }
                 }
             }
             else
             {
-                if (input.Length > 3 || (input.Length > 2 && stoneType.Standing))
+                if (input.Length > 3 || (input.Length > 2 && stoneType.Standing) || input.Length < 2)
                 {
                     //exception
                     throw new IllegalInputException("Illegal input format for placing new stones");
