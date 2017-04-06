@@ -21,8 +21,8 @@ namespace Tak.Game
         private bool[,] visited;
         private Colour turn;
         private GameState state;
-
-        private int whiteCapstones, blackCapstones, whiteFlatstones, blackFlatstones;
+        private StoneReserve whiteStones;
+        private StoneReserve blackStones;
 
         public Colour Turn { get { return turn; } set { turn = value; } }
         public GameState GameState { get { return state; } }
@@ -44,18 +44,16 @@ namespace Tak.Game
             set { stacks = value; }
         }
 
-        public int WhiteCapstones { get { return whiteCapstones; } }
-        public int WhiteFlatstones { get { return whiteFlatstones; } }
-        public int BlackCapstones { get { return blackCapstones; } }
-        public int BlackFlatstones { get { return blackFlatstones; } }
-
         public GameBoard(int size)
         {
-            if (size < 3)
-                throw new TakException("Minimum board size is 3");
+            if (size < 3 || size > 8)
+                throw new TakException("Minimum board size is 3. Maximum board size is 8.");
             turn = Colour.Black;
             this.size = size;
             stacks = new StoneStack[size, size];
+            whiteStones = new StoneReserve(size);
+            blackStones = new StoneReserve(size);
+
             for (int x = 0; x < size; x++)
                 for (int y = 0; y < size; y++)
                     stacks[x, y] = new StoneStack();
@@ -71,13 +69,24 @@ namespace Tak.Game
                 stacks[x, y].AddStone(stone);
             else
             {
-                CheckStoneReserve(stone.Colour, stone);
-                stacks[x, y].NewStone(stone);
-                decrement
+                if (stone.Colour == Colour.White)
+                {
+                    whiteStones.CheckReserve(stone);
+                    stacks[x, y].NewStone(stone);
+                    whiteStones.Decrement(stone);
+                }
+                else if (stone.Colour == Colour.Black)
+                {
+                    blackStones.CheckReserve(stone);
+                    stacks[x, y].NewStone(stone);
+                    blackStones.Decrement(stone);
+                }
+                else
+                {
+                    throw new TakException("Colour not recognised.");
+                }
             }
         }
-
-
 
         public StoneStack PickUpStack(int x, int y, int amount = UNSPECIFIED)
         {
@@ -205,30 +214,12 @@ namespace Tak.Game
                 throw new IllegalMoveException("\nIndex [" + x + ", " + y + "] is out of bounds");
         }
 
-        private void CheckStoneReserve(Colour colour, Stone stone)
-        {
-            if (colour == Colour.White)
-            {
-                if (stone is Capstone && whiteCapstones == 0)
-                    throw new IllegalMoveException("No more capstones in White's reserve.");
-                if (stone is Flatstone && whiteFlatstones == 0)
-                    throw new IllegalMoveException("No more flat stones in White's reserve.");
-            }
-            else
-            {
-                if (stone is Capstone && blackCapstones == 0)
-                    throw new IllegalMoveException("No more capstones in Black's reserve.");
-                if (stone is Flatstone && blackFlatstones == 0)
-                    throw new IllegalMoveException("No more flat stones in Black's reserve.");
-            }
-        }
-
         private class StoneReserve
         {
             private int flatstones;
             private int capstones;
 
-            StoneReserve(int size)
+            internal StoneReserve(int size)
             {
                 if (size < 5)
                     capstones = 0;
@@ -247,19 +238,30 @@ namespace Tak.Game
                     flatstones = (size - 3) * 10;
             }
 
-            void Decrement(Stone stone)
+            internal void CheckReserve(Stone stone)
+            {
+                if (stone is Capstone)
+                {
+                    if (capstones < 1)
+                        throw new IllegalMoveException("No more capstones in the reserve.");
+                }
+                else if (stone is Flatstone)
+                {
+                    if (flatstones < 1)
+                        throw new IllegalMoveException("No more flat stones in the reserve.");
+                }
+                else
+                    throw new TakException("Stone not recognised");
+            }
+
+            internal void Decrement(Stone stone)
             {
                 if (stone is Capstone)
                     capstones--;
                 else if (stone is Flatstone)
                     flatstones--;
                 else
-                    throw new TakException("Stone not recognized");
-            }
-
-            void CheckReserve(Stone stone)
-            {
-
+                    throw new TakException("Stone not recognised");
             }
         }
     }
