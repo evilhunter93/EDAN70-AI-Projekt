@@ -116,5 +116,13 @@ namespace TakTests
             board.EndTurn();
             Assert.AreEqual(board.GameState, GameState.Tie);
         }
+
+        [TestMethod]
+        public void InputStone()
+        {
+            int size = 5;
+            GameBoard board = new GameBoard(size);
+
+        }
     }
 }
