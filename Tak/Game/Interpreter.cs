@@ -27,15 +27,15 @@ namespace Tak.Game
             {
                 case 'S':
                     charCount++;
-                    stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
+                    stoneType = new Flatstone(boardModel.Turn);
                     stoneType.Standing = true;
                     break;
                 case 'C':
                     charCount++;
-                    stoneType = new Capstone(Colour.Black); // FIXME: Turn decides colour
+                    stoneType = new Capstone(boardModel.Turn);
                     break;
                 default:
-                    stoneType = new Flatstone(Colour.Black); // FIXME: Turn decides colour
+                    stoneType = new Flatstone(boardModel.Turn);
                     break;
             }
             ch = input[charCount];
