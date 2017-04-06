@@ -23,7 +23,6 @@ namespace Tak.Game
             int charCount = 0;
             char ch;
             ch = input[charCount];
-            //todo Check correct length
             switch (ch)
             {
                 case 'S':
@@ -43,6 +42,7 @@ namespace Tak.Game
             if ((ch > 'z') || (ch < 'a'))
             {
                 //exception
+                throw new IllegalInputException("Illegal character given, please specify a lowercase letter for the x-axis");
             }
             x = (ch - 'a') - '0';
             ch = input[charCount++];
@@ -55,10 +55,12 @@ namespace Tak.Game
             if (m && (input.Length < 3))
             {
                 //exception
+                throw new IllegalInputException("Illegal input format for movement of stones, need more arguments");
             }
             if (m && stoneType.Standing)
             {
                 //exception
+                throw new IllegalInputException("Illegal input format for movement of stones, stone-type should not be specified");
             }
             if (m)
             {
@@ -125,7 +127,7 @@ namespace Tak.Game
                 if (input.Length > 3 || (input.Length > 2 && stoneType.Standing))
                 {
                     //exception
-                    throw new IllegalInputException("");
+                    throw new IllegalInputException("Illegal input format for placing new stones");
                 }
                 boardModel.PlaceStone(x, y, stoneType);
             }
