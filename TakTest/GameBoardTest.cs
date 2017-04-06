@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tak.Game;
+using Tak.Exceptions;
 using System.Diagnostics;
 
 namespace TakTests

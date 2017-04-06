@@ -50,12 +50,12 @@
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\GameBoard.cs" />
     <Compile Include="Game\HumanPlayer.cs" />
-    <Compile Include="Game\IllegalMoveException.cs" />
+    <Compile Include="Exceptions\IllegalMoveException.cs" />
     <Compile Include="Game\Interpreter.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\Stone.cs" />
     <Compile Include="Game\StoneStack.cs" />
-    <Compile Include="Game\TakException.cs" />
+    <Compile Include="Exceptions\TakException.cs" />
     <Compile Include="GUI\Class1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
