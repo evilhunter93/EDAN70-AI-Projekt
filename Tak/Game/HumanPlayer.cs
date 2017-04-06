@@ -8,7 +8,7 @@ namespace Tak.Game
 {
     class HumanPlayer : Player
     {
-        public HumanPlayer(Colour c, int nCap, int nFlat) : base(c, nCap, nFlat) { }
+        public HumanPlayer(Colour c) : base(c) { }
 
         public override void DoMove()
         {

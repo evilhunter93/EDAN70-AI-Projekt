@@ -13,19 +13,13 @@ namespace Tak.Game
 {
     abstract class Player
     {
-        int nbrCapStones;
-        int nbrFlatStones;
         Colour colour;
 
         public Colour Colour { get { return colour; } }
-        public int NbrCapStones { get { return nbrCapStones; } }
-        public int NbrFlatStones { get { return nbrFlatStones; } }
 
-        protected Player(Colour colour, int nbrCapStones, int nbrFlatStones)
+        protected Player(Colour colour)
         {
             this.colour = colour;
-            this.nbrCapStones = nbrCapStones;
-            this.nbrFlatStones = nbrFlatStones;
         }
 
         public abstract void DoMove();

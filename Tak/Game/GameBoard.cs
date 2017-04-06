@@ -21,6 +21,8 @@ namespace Tak.Game
         private Colour turn;
         private GameState state;
 
+        private int whiteCapstones, blackCapstones, whiteFlatstones, blackFlatstones;
+
         public Colour Turn { get { return turn; } set { turn = value; } }
         public GameState GameState { get { return state; } }
 
@@ -41,14 +43,41 @@ namespace Tak.Game
             set { stacks = value; }
         }
 
+        public int WhiteCapstones { get { return whiteCapstones; } }
+        public int WhiteFlatstones { get { return whiteFlatstones; } }
+        public int BlackCapstones { get { return blackCapstones; } }
+        public int BlackFlatstones { get { return blackFlatstones; } }
+
         public GameBoard(int size)
         {
+            if (size < 3)
+                throw new TakException("Minimum board size is 3");
             turn = Colour.Black;
             this.size = size;
             stacks = new StoneStack[size, size];
             for (int x = 0; x < size; x++)
                 for (int y = 0; y < size; y++)
                     stacks[x, y] = new StoneStack();
+            InitStones(size);
+        }
+
+        private void InitStones(int size)
+        {
+            if (size < 5)
+                whiteCapstones = blackCapstones = 0;
+            else if (size < 7)
+                whiteCapstones = blackCapstones = 1;
+            else
+                whiteCapstones = blackCapstones = 2;
+
+            if (size == 3)
+                whiteFlatstones = blackFlatstones = 10;
+            else if (size == 4)
+                whiteFlatstones = blackFlatstones = 15;
+            else if (size == 5)
+                whiteFlatstones = blackFlatstones = 21;
+            else
+                whiteFlatstones = blackFlatstones = (size - 3) * 10;
         }
 
         public void PlaceStone(int x, int y, Stone stone, bool existing = false)
@@ -59,7 +88,6 @@ namespace Tak.Game
                 stacks[x, y].AddStone(stone);
             else
                 stacks[x, y].NewStone(stone);
-
         }
 
         public StoneStack PickUpStack(int x, int y, int amount = UNSPECIFIED)
