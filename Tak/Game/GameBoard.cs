@@ -146,6 +146,9 @@ namespace Tak.Game
             if (x < 0 || x >= size || y < 0 || y >= size)
                 return false;
 
+            if (stacks[x, y].Count == 0)
+                return false;
+
             if (stacks[x0, y0].Owner != stacks[x, y].Owner)
                 return false;
 
