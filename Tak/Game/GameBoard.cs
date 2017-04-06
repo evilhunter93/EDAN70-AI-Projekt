@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tak.Utilities;
+using Tak.Exceptions;
 
 public enum GameState
 {
@@ -58,27 +59,9 @@ namespace Tak.Game
             for (int x = 0; x < size; x++)
                 for (int y = 0; y < size; y++)
                     stacks[x, y] = new StoneStack();
-            InitStones(size);
         }
 
-        private void InitStones(int size)
-        {
-            if (size < 5)
-                whiteCapstones = blackCapstones = 0;
-            else if (size < 7)
-                whiteCapstones = blackCapstones = 1;
-            else
-                whiteCapstones = blackCapstones = 2;
 
-            if (size == 3)
-                whiteFlatstones = blackFlatstones = 10;
-            else if (size == 4)
-                whiteFlatstones = blackFlatstones = 15;
-            else if (size == 5)
-                whiteFlatstones = blackFlatstones = 21;
-            else
-                whiteFlatstones = blackFlatstones = (size - 3) * 10;
-        }
 
         public void PlaceStone(int x, int y, Stone stone, bool existing = false)
         {
@@ -87,8 +70,14 @@ namespace Tak.Game
             if (existing)
                 stacks[x, y].AddStone(stone);
             else
+            {
+                CheckStoneReserve(stone.Colour, stone);
                 stacks[x, y].NewStone(stone);
+                decrement
+            }
         }
+
+
 
         public StoneStack PickUpStack(int x, int y, int amount = UNSPECIFIED)
         {
@@ -214,6 +203,64 @@ namespace Tak.Game
         {
             if (x < 0 || x >= size || y < 0 || y >= size)
                 throw new IllegalMoveException("\nIndex [" + x + ", " + y + "] is out of bounds");
+        }
+
+        private void CheckStoneReserve(Colour colour, Stone stone)
+        {
+            if (colour == Colour.White)
+            {
+                if (stone is Capstone && whiteCapstones == 0)
+                    throw new IllegalMoveException("No more capstones in White's reserve.");
+                if (stone is Flatstone && whiteFlatstones == 0)
+                    throw new IllegalMoveException("No more flat stones in White's reserve.");
+            }
+            else
+            {
+                if (stone is Capstone && blackCapstones == 0)
+                    throw new IllegalMoveException("No more capstones in Black's reserve.");
+                if (stone is Flatstone && blackFlatstones == 0)
+                    throw new IllegalMoveException("No more flat stones in Black's reserve.");
+            }
+        }
+
+        private class StoneReserve
+        {
+            private int flatstones;
+            private int capstones;
+
+            StoneReserve(int size)
+            {
+                if (size < 5)
+                    capstones = 0;
+                else if (size < 7)
+                    capstones = 1;
+                else
+                    capstones = 2;
+
+                if (size == 3)
+                    flatstones = 10;
+                else if (size == 4)
+                    flatstones = 15;
+                else if (size == 5)
+                    flatstones = 21;
+                else
+                    flatstones = (size - 3) * 10;
+            }
+
+            void Decrement(Stone stone)
+            {
+                if (stone is Capstone)
+                    capstones--;
+                else if (stone is Flatstone)
+                    flatstones--;
+                else
+                    throw new TakException("Stone not recognized");
+            }
+
+            void CheckReserve(Stone stone)
+            {
+
+            }
         }
     }
 }
