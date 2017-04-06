@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Tak.Game
 {
-    public class IllegalMoveException : TakException
+    public class TakException : Exception
     {
-        public IllegalMoveException(string message) : base(message) { }
+        public TakException(string message) : base(message) { }
     }
 }
