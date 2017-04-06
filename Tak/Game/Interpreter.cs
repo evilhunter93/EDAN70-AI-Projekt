@@ -52,7 +52,7 @@ namespace Tak.Game
             bool mu = input.Contains("+");
             bool md = input.Contains("-");
             bool m = ml || mr || mu || md;
-            if (m && (input.Length < 4))
+            if (m && (input.Length < 3))
             {
                 //exception
             }
@@ -77,10 +77,9 @@ namespace Tak.Game
                     foreach (var n in stackPlace)
                     {
                         x--;
-                        StoneStack mStack = stack.Separate(n);
                         for (int j = 0; j < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, mStack.PopStone());
+                            boardModel.PlaceStone(x, y, stack.PopStone());
                         }
                     }
                 }
@@ -126,9 +125,15 @@ namespace Tak.Game
                 if (input.Length > 3 || (input.Length > 2 && stoneType.Standing))
                 {
                     //exception
+                    throw new IllegalInputException("");
                 }
                 boardModel.PlaceStone(x, y, stoneType);
             }
         }
+        private class IllegalInputException : Exception
+        {
+            public IllegalInputException(string message) : base(message) { }
+        }
     }
+
 }
