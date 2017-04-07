@@ -131,6 +131,18 @@ namespace TakTests
         }
 
         [TestMethod]
+        public void PlaceExistingOnEmpty()
+        {
+            GameBoard board1 = new GameBoard(5);
+            GameBoard board2 = new GameBoard(5);
+
+            board1.PlaceStone(0, 0, new Flatstone(Colour.White), true);
+            board2.PlaceStone(0, 0, new Flatstone(Colour.White));
+
+            Assert.AreEqual(board1, board2);
+        }
+
+        [TestMethod]
         public void SizeEquality()
         {
             GameBoard board1 = new GameBoard(5);
