@@ -198,5 +198,21 @@ namespace TakTests
             Assert.AreEqual(board1, board2);
             Assert.AreNotEqual(board2, board3);
         }
+
+        [TestMethod]
+        public void DeepCopyEquals()
+        {
+            GameBoard board1 = new GameBoard(5);
+            GameBoard board2 = new GameBoard(5);
+
+            board1.PlaceStone(0, 0, new Flatstone(Colour.White));
+            board1.PlaceStone(1, 0, new Flatstone(Colour.Black));
+            board1.PlaceStone(3, 3, new Flatstone(Colour.White));
+            board1.PlaceStone(4, 1, new Flatstone(Colour.Black));
+            board1.PlaceStone(4, 4, new Flatstone(Colour.White));
+            board2.Stacks = board1.Stacks;
+
+            Assert.AreEqual(board1, board2);
+        }
     }
 }
