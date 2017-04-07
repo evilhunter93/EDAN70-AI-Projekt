@@ -13,7 +13,7 @@ public enum GameState
 
 namespace Tak.Game
 {
-    public class GameBoard
+    public class GameBoard : IEquatable<GameBoard>
     {
         public const int UNSPECIFIED = -1;
         private int size;
@@ -114,6 +114,42 @@ namespace Tak.Game
             turn = (turn == Colour.Black) ? Colour.White : Colour.Black;
             return turn;
         }
+
+
+        public override bool Equals(Object obj)
+        {
+            var other = obj as GameBoard;
+            if (other == null)
+                return false;
+
+            return Equals(other);
+        }
+
+        public bool Equals(GameBoard other)
+        {
+            if (other == null)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (size != other.size)
+                return false;
+
+            if (turn != other.Turn)
+                return false;
+
+            if (state != other.GameState)
+                return false;
+
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                    if (!stacks[i, j].Equals(other.stacks[i, j]))
+                        return false;
+
+            return true;
+        }
+
 
         private void UpdateGameState()
         {
