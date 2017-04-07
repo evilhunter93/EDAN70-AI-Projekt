@@ -32,11 +32,11 @@ namespace Tak.Game
 
         public void AddStone(Stone stone)
         {
-            if (Top is Capstone)
-                throw new IllegalMoveException("\nCan not place stone on capstone.");
-
             if (Count > 0)
             {
+                if (Top is Capstone)
+                    throw new IllegalMoveException("\nCan not place stone on capstone.");
+
                 if (!(stone is Capstone))
                 {
                     if (Top.Standing)
