@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tak.Game
 {
-    public abstract class Stone
+    public abstract class Stone : IEquatable<Stone>
     {
         private Colour colour;
         protected bool standing;
@@ -24,5 +24,7 @@ namespace Tak.Game
             this.colour = colour;
             this.standing = standing;
         }
+
+        public abstract bool Equals(Stone other);
     }
 }
