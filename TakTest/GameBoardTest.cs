@@ -129,5 +129,67 @@ namespace TakTests
             parser.input("a1");
             board.PlaceStone(0, 0, new Flatstone(Colour.Black));
         }
+
+        [TestMethod]
+        public void SizeEquality()
+        {
+            GameBoard board1 = new GameBoard(5);
+            GameBoard board2 = new GameBoard(5);
+            GameBoard board3 = new GameBoard(4);
+
+            Assert.AreEqual(board1, board2);
+            Assert.AreNotEqual(board2, board3);
+        }
+
+
+        [TestMethod]
+        public void TurnEquality()
+        {
+            GameBoard board1 = new GameBoard(5);
+            GameBoard board2 = new GameBoard(5);
+            GameBoard board3 = new GameBoard(5);
+
+            board1.Turn = Colour.White;
+            board2.Turn = Colour.White;
+            board3.Turn = Colour.Black;
+
+            Assert.AreEqual(board1, board2);
+            Assert.AreNotEqual(board2, board3);
+        }
+
+        [TestMethod]
+        public void SimpleBoardEquality()
+        {
+            GameBoard board1 = new GameBoard(5);
+            GameBoard board2 = new GameBoard(5);
+            GameBoard board3 = new GameBoard(5);
+
+            board1.PlaceStone(0, 0, new Flatstone(Colour.Black));
+            board1.PlaceStone(1, 0, new Flatstone(Colour.Black));
+            board1.PlaceStone(3, 3, new Flatstone(Colour.Black));
+            board1.PlaceStone(4, 1, new Flatstone(Colour.Black));
+            board1.PlaceStone(4, 4, new Flatstone(Colour.Black));
+
+            board1.PlaceStone(0, 4, new Flatstone(Colour.White));
+            board1.PlaceStone(1, 1, new Flatstone(Colour.White));
+            board1.PlaceStone(1, 4, new Flatstone(Colour.White));
+            board1.PlaceStone(3, 1, new Flatstone(Colour.White));
+            board1.PlaceStone(3, 2, new Flatstone(Colour.White));
+
+            board2.PlaceStone(0, 0, new Flatstone(Colour.Black));
+            board2.PlaceStone(1, 0, new Flatstone(Colour.Black));
+            board2.PlaceStone(3, 3, new Flatstone(Colour.Black));
+            board2.PlaceStone(4, 1, new Flatstone(Colour.Black));
+            board2.PlaceStone(4, 4, new Flatstone(Colour.Black));
+
+            board2.PlaceStone(0, 4, new Flatstone(Colour.White));
+            board2.PlaceStone(1, 1, new Flatstone(Colour.White));
+            board2.PlaceStone(1, 4, new Flatstone(Colour.White));
+            board2.PlaceStone(3, 1, new Flatstone(Colour.White));
+            board2.PlaceStone(3, 2, new Flatstone(Colour.White));
+
+            Assert.AreEqual(board1, board2);
+            Assert.AreNotEqual(board2, board3);
+        }
     }
 }
