@@ -86,8 +86,8 @@ namespace TakTests
         {
             int size = 5;
             GameBoard board = new GameBoard(size);
-            for (int i = 0; i < size; i++)
-                for (int j = 0; j < size; j++)
+            for (int i = 0; i < size - 1; i++)
+                for (int j = 0; j < size - 1; j++)
                     board.PlaceStone(i, j, new Flatstone(Colour.Black));
 
             board.PlaceStone(0, 0, new Flatstone(Colour.White), true);
@@ -97,8 +97,8 @@ namespace TakTests
             board.PlaceStone(2, 2, new Flatstone(Colour.White), true);
             board.PlaceStone(2, 3, new Flatstone(Colour.White), true);
             board.PlaceStone(3, 3, new Flatstone(Colour.White), true);
-            board.PlaceStone(3, 4, new Flatstone(Colour.White), true);
-            board.PlaceStone(4, 4, new Flatstone(Colour.White), true);
+            board.PlaceStone(3, 4, new Flatstone(Colour.White));
+            board.PlaceStone(4, 4, new Flatstone(Colour.White));
 
             board.EndTurn();
             Assert.AreEqual(board.GameState, GameState.WR);
