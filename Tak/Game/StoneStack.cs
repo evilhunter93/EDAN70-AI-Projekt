@@ -7,7 +7,7 @@ using Tak.Exceptions;
 
 namespace Tak.Game
 {
-    public class StoneStack
+    public class StoneStack : IEquatable<StoneStack>
     {
         private Stack<Stone> stones;
 
@@ -67,6 +67,38 @@ namespace Tak.Game
                 temp.AddStone(stones.Pop());
             }
             return temp;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as StoneStack;
+            if (other == null)
+                return false;
+
+            return Equals(other);
+        }
+
+        public bool Equals(StoneStack other)
+        {
+            if (other == null)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (stones.Count != other.Count)
+                return false;
+
+            Stone[] array1 = new Stone[Count];
+            array1 = stones.ToArray();
+            Stone[] array2 = new Stone[Count];
+            array2 = other.stones.ToArray();
+
+            for (int i = 0; i < Count; i++)
+                if (!array1[i].Equals(array2[i]))
+                    return false;
+
+            return true;
         }
     }
 }
