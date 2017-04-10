@@ -14,12 +14,14 @@ namespace Tak.Game
     abstract class Player
     {
         Colour colour;
+        Interpreter interpreter;
 
         public Colour Colour { get { return colour; } }
 
-        protected Player(Colour colour)
+        protected Player(Colour colour, Interpreter interpreter)
         {
             this.colour = colour;
+            this.interpreter = interpreter;
         }
 
         public abstract void DoMove();

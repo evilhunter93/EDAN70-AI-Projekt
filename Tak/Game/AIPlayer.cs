@@ -8,7 +8,7 @@ namespace Tak.Game
 {
     class AIPlayer : Player
     {
-        public AIPlayer(Colour c) : base(c) { }
+        public AIPlayer(Colour c, Interpreter i) : base(c, i) { }
 
         public override void DoMove()
         {
