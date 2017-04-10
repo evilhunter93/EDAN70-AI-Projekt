@@ -22,6 +22,7 @@ namespace Tak.Game
             int x;
             int y;
             int charCount = 0;
+            int amount = 1;
             char ch;
             ch = input[charCount];
             switch (ch)
@@ -42,8 +43,16 @@ namespace Tak.Game
             ch = input[charCount];
             if ((ch > 'z') || (ch < 'a'))
             {
-                //exception
-                throw new IllegalInputException("Illegal character given, please specify a lowercase letter for the x-axis");
+                if (ch > 0)
+                {
+                    amount = ch - '0';
+                    ch = input[charCount++];
+                }
+                else
+                {
+                    //exception
+                    throw new IllegalInputException("Illegal character given, please specify a lowercase letter for the x-axis");
+                }
             }
             x = ch - 'a'; // [A..Z] -> [0..25]
             ch = input[++charCount];
@@ -72,21 +81,28 @@ namespace Tak.Game
                     ch = input[charCount += 2];
                     stackPlace = input.Substring(charCount);
                     int[] move = new int[stackPlace.Length];
-                    int amount = 0;
-                    foreach (var i in stackPlace)
+                    int amountCh = 0;
+
+                    for(int i = 0; i<stackPlace.Length; i++)
                     {
-                        amount += i;
+                        int num = stackPlace[i] - '0';
+                        move[i] = num;
+                        amountCh += num;
+                    }
+                    if (amountCh != amountCh)
+                    {
+                        throw new IllegalInputException("Amount specified does not correlate with amount put down");
                     }
                     stack = boardModel.PickUpStack(x, y, amount);
                 }
                 else
-                {
-                    stackPlace = "1";
+                {;
+                    move[0] = 1;
                     stack = boardModel.PickUpStack(x, y);
                 }
                 if (ml)
                 {
-                    foreach (var n in stackPlace)
+                    foreach (var n in move)
                     {
                         x--;
                         int drops = n - '0';
@@ -98,7 +114,7 @@ namespace Tak.Game
                 }
                 else if (mr)
                 {
-                    foreach (var n in stackPlace)
+                    foreach (var n in move)
                     {
                         x++;
                         int drops = n - '0';
@@ -110,7 +126,7 @@ namespace Tak.Game
                 }
                 else if (mu)
                 {
-                    foreach (var n in stackPlace)
+                    foreach (var n in move)
                     {
                         y++;
                         int drops = n - '0';
@@ -122,7 +138,7 @@ namespace Tak.Game
                 }
                 else
                 {
-                    foreach (var n in stackPlace)
+                    foreach (var n in move)
                     {
                         y--;
                         int drops = n - '0';
