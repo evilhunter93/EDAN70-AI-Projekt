@@ -75,6 +75,11 @@ namespace Tak.GUI
             Console.WriteLine(text);
         }
 
+        public void Write(string gameOverText)
+        {
+            Console.WriteLine(gameOverText);
+        }
+
         private string StoneSymbol(Stone s)
         {
             string symbol = "";
