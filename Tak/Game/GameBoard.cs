@@ -95,6 +95,8 @@ namespace Tak.Game
 
             if (amount == UNSPECIFIED)
             {
+                if (stacks[x, y].Count < 1)
+                    throw new IllegalMoveException("\nCount < 1");
                 if (stacks[x, y].Count > 1)
                     throw new IllegalMoveException("\nUnspecified number of stones to pick up, but stack contains more than one");
                 else
