@@ -89,9 +89,10 @@ namespace Tak.Game
                     foreach (var n in stackPlace)
                     {
                         x--;
-                        for (int j = 0; j < n; j++)
+                        int drops = n - '0';
+                        for (int j = 0; j < drops; j++)
                         {
-                            boardModel.PlaceStone(x, y, stack.PopStone());
+                            boardModel.PlaceStone(x, y, stack.PopStone(), true);
                         }
                     }
                 }
@@ -100,9 +101,10 @@ namespace Tak.Game
                     foreach (var n in stackPlace)
                     {
                         x++;
-                        for (int j = 0; j < n; j++)
+                        int drops = n - '0';
+                        for (int j = 0; j < drops; j++)
                         {
-                            boardModel.PlaceStone(x, y, stack.PopStone());
+                            boardModel.PlaceStone(x, y, stack.PopStone(), true);
                         }
                     }
                 }
@@ -111,9 +113,10 @@ namespace Tak.Game
                     foreach (var n in stackPlace)
                     {
                         y++;
-                        for (int j = 0; j < n; j++)
+                        int drops = n - '0';
+                        for (int j = 0; j < drops; j++)
                         {
-                            boardModel.PlaceStone(x, y, stack.PopStone());
+                            boardModel.PlaceStone(x, y, stack.PopStone(), true);
                         }
                     }
                 }
@@ -122,9 +125,10 @@ namespace Tak.Game
                     foreach (var n in stackPlace)
                     {
                         y--;
-                        for (int j = 0; j < n; j++)
+                        int drops = n - '0';
+                        for (int j = 0; drops < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, stack.PopStone());
+                            boardModel.PlaceStone(x, y, stack.PopStone(), true);
                         }
                     }
                 }
