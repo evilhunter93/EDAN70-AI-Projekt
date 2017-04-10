@@ -18,7 +18,7 @@ namespace Tak.Game
 
         private string PromptInput()
         {
-            Console.WriteLine("\nYour turn!");
+            Console.WriteLine("\n" + colourText + " turn!");
             Console.Write("Enter move: ");
             return Console.ReadLine();
         }
