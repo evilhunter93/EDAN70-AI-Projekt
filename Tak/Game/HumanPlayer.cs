@@ -13,7 +13,7 @@ namespace Tak.Game
         public override void DoMove()
         {
             string move = PromptInput();
-            //Console.WriteLine("\nYour input was [{0}]", move);
+            interpreter.Input(move);
         }
 
         private string PromptInput()
