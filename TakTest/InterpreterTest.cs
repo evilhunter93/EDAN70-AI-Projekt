@@ -19,8 +19,19 @@ namespace TakTest
 
             board1.Turn = Colour.Black;
             board2.Turn = Colour.Black;
-            inter1.input("a1");
             board2.PlaceStone(0, 0, new Flatstone(Colour.Black));
+            board2.PlaceStone(4, 4, new Flatstone(Colour.Black));
+            Stone stone = new Flatstone(Colour.Black);
+            stone.Standing = true;
+            board2.PlaceStone(1, 3, stone);
+            board2.PlaceStone(2, 2, new Capstone(Colour.Black));
+            board2.PlaceStone(3, 1, new Flatstone(Colour.Black));
+
+            inter1.input("a1");
+            inter1.input("e5");
+            inter1.input("Sb4");
+            inter1.input("Cc3");
+            inter1.input("d2");
 
             Assert.AreEqual(board1, board2);
         }
