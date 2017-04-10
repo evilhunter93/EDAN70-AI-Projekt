@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tak.Game;
 
 namespace Tak.Game
 {
@@ -39,23 +40,26 @@ namespace Tak.Game
         {
             switch (board.GameState)
             {
-                case InProgress:
-                    p1.doMove();
+                case GameState.InProgress:
+                    p1.DoMove();
                     return turnManager(p2, p1);
-                    break;
-                case Tie:
+                case GameState.Tie:
                     winCond = "\nTie";
                     break;
-                case (WR || WF):
+                case GameState.WR:
+                case GameState.WF:
                     winCond = "\nWhite wins!";
                     break;
-                case (BR || BF):
+                case GameState.BR:
+                case GameState.BF:
                     winCond = "\nBlack wins!";
                     break;
                 default:
                     winCond = "\nInvalid win-condition!";
                     break;
             }
+
+            return winCond;
         }
     }
 }
