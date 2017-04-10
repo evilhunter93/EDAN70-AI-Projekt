@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tak.Game;
+using Tak.GUI;
 
 namespace Tak.Game
 {
@@ -12,12 +13,14 @@ namespace Tak.Game
         GameBoard board;
         Player p1;
         Player p2;
-        String winCond;
+        string winCond;
+        ASCIIGUI gui;
 
-        public void initialize(int size, String p1, String p2)
+        public void Initialize(int size, string p1, string p2)
         {
             board = new GameBoard(size);
             Interpreter interpreter = new Interpreter(board);
+            gui = new ASCIIGUI(board, size);
             if (p1 == "Human")
             {
                 this.p1 = new HumanPlayer(Colour.White, interpreter);
@@ -34,17 +37,17 @@ namespace Tak.Game
             {
                 this.p2 = new AIPlayer(Colour.Black, interpreter);
             }
-            winCond = turnManager(this.p1, this.p2);
+            winCond = TurnManager(this.p1, this.p2);
         }
 
-        private string turnManager(Player p1, Player p2)
+        private string TurnManager(Player p1, Player p2)
         {
             while (board.GameState == GameState.InProgress)
             {
                 p1.DoMove();
-                GUI.draw(board);
+                gui.Draw();
                 p2.DoMove();
-                GUI.draw(board);
+                gui.Draw();
             }
             switch (board.GameState)
             {
