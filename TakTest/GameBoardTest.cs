@@ -133,7 +133,7 @@ namespace TakTests
             GameBoard board = new GameBoard(size);
             board.Turn = Colour.Black;
             Interpreter parser = new Interpreter(board);
-            parser.input("a1");
+            parser.Input("a1");
             board.PlaceStone(0, 0, new Flatstone(Colour.Black));
         }
 

@@ -16,7 +16,7 @@ namespace Tak.Game
             this.boardModel = boardModel;
         }
 
-        public void input(String input)
+        public void Input(String input)
         {
             Stone stoneType;
             int x;
@@ -43,10 +43,10 @@ namespace Tak.Game
             ch = input[charCount];
             if ((ch > 'z') || (ch < 'a'))
             {
-                if (ch > 0)
+                if (ch > '0')
                 {
                     amount = ch - '0';
-                    ch = input[charCount++];
+                    ch = input[++charCount];
                 }
                 else
                 {
@@ -76,27 +76,28 @@ namespace Tak.Game
             {
                 String stackPlace;
                 StoneStack stack;
+                int[] move = new int[1];
                 if (input.Length > 3)
                 {
                     ch = input[charCount += 2];
                     stackPlace = input.Substring(charCount);
-                    int[] move = new int[stackPlace.Length];
+                    move = new int[stackPlace.Length];
                     int amountCh = 0;
 
-                    for(int i = 0; i<stackPlace.Length; i++)
+                    for (int i = 0; i < stackPlace.Length; i++)
                     {
                         int num = stackPlace[i] - '0';
                         move[i] = num;
                         amountCh += num;
                     }
-                    if (amountCh != amountCh)
+                    if (amountCh != amount)
                     {
                         throw new IllegalInputException("Amount specified does not correlate with amount put down");
                     }
                     stack = boardModel.PickUpStack(x, y, amount);
                 }
                 else
-                {;
+                {
                     move[0] = 1;
                     stack = boardModel.PickUpStack(x, y);
                 }
@@ -105,8 +106,7 @@ namespace Tak.Game
                     foreach (var n in move)
                     {
                         x--;
-                        int drops = n - '0';
-                        for (int j = 0; j < drops; j++)
+                        for (int j = 0; j < n; j++)
                         {
                             boardModel.PlaceStone(x, y, stack.PopStone(), true);
                         }
@@ -117,8 +117,7 @@ namespace Tak.Game
                     foreach (var n in move)
                     {
                         x++;
-                        int drops = n - '0';
-                        for (int j = 0; j < drops; j++)
+                        for (int j = 0; j < n; j++)
                         {
                             boardModel.PlaceStone(x, y, stack.PopStone(), true);
                         }
@@ -129,8 +128,7 @@ namespace Tak.Game
                     foreach (var n in move)
                     {
                         y++;
-                        int drops = n - '0';
-                        for (int j = 0; j < drops; j++)
+                        for (int j = 0; j < n; j++)
                         {
                             boardModel.PlaceStone(x, y, stack.PopStone(), true);
                         }
@@ -141,8 +139,7 @@ namespace Tak.Game
                     foreach (var n in move)
                     {
                         y--;
-                        int drops = n - '0';
-                        for (int j = 0; drops < n; j++)
+                        for (int j = 0; j < n; j++)
                         {
                             boardModel.PlaceStone(x, y, stack.PopStone(), true);
                         }
