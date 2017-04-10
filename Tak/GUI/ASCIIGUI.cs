@@ -71,6 +71,7 @@ namespace Tak.GUI
                 text += "\n";
             }
 
+            Console.Clear();
             Console.WriteLine(text);
         }
 
