@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,6 +51,7 @@ namespace Tak.Game
             turn = Colour.Black;
             this.size = size;
             stacks = new StoneStack[size, size];
+            state = GameState.InProgress;
             whiteStones = new StoneReserve(size);
             blackStones = new StoneReserve(size);
 
