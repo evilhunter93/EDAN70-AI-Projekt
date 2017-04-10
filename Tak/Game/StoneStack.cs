@@ -58,6 +58,9 @@ namespace Tak.Game
 
         public StoneStack Separate(int nbr)
         {
+            if (nbr < 1)
+                throw new IllegalMoveException("\nCould not pick up " + nbr + " stones.");
+
             if (nbr > Count)
                 throw new IllegalMoveException("\nCould not pick up " + nbr + " stones, stack contains " + Count);
 

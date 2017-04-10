@@ -57,7 +57,7 @@
     <Compile Include="Game\Stone.cs" />
     <Compile Include="Game\StoneStack.cs" />
     <Compile Include="Exceptions\TakException.cs" />
-    <Compile Include="GUI\Class1.cs" />
+    <Compile Include="GUI\ASCIIGUI.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ObjectExtensions.cs" />

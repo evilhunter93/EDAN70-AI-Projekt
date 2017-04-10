@@ -45,11 +45,11 @@ namespace TakTest
             board1.Turn = Colour.White;
             board2.Turn = Colour.White;
 
-            board1.PlaceStone(1, 0, new Flatstone(Colour.Black));
+            board1.PlaceStone(0, 1, new Flatstone(Colour.Black));
             board1.PlaceStone(0, 0, new Flatstone(Colour.White));
 
-            board2.PlaceStone(1, 0, new Flatstone(Colour.Black));
-            board2.PlaceStone(1, 0, new Flatstone(Colour.White), true);
+            board2.PlaceStone(0, 1, new Flatstone(Colour.Black));
+            board2.PlaceStone(0, 1, new Flatstone(Colour.White), true);
 
             inter1.input("a1+");
 
