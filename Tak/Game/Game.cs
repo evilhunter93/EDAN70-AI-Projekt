@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tak.Game;
+using Tak.GUI;
 
 namespace Tak.Game
 {
