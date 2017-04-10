@@ -8,47 +8,56 @@ using Tak.GUI;
 
 namespace Tak.Game
 {
-    class Game
+    public class TakGame
     {
         GameBoard board;
         Player p1;
         Player p2;
+        Player currentPlayer;
         string winCond;
         ASCIIGUI gui;
 
-        public void Initialize(int size, string p1, string p2)
+        public TakGame(int size, string p1Type, string p2Type)
+        {
+            Initialize(size, p1Type, p2Type);
+        }
+
+        public void Initialize(int size, string p1Type, string p2Type)
         {
             board = new GameBoard(size);
             Interpreter interpreter = new Interpreter(board);
             gui = new ASCIIGUI(board, size);
-            if (p1 == "Human")
-            {
-                this.p1 = new HumanPlayer(Colour.White, interpreter);
-            }
+
+            if (p1Type == "Human")
+                p1 = new HumanPlayer(Colour.White, interpreter);
             else
-            {
-                this.p1 = new AIPlayer(Colour.White, interpreter);
-            }
-            if (p2 == "Human")
-            {
-                this.p2 = new HumanPlayer(Colour.Black, interpreter);
-            }
+                p1 = new AIPlayer(Colour.White, interpreter);
+
+            if (p2Type == "Human")
+                p2 = new HumanPlayer(Colour.Black, interpreter);
             else
-            {
-                this.p2 = new AIPlayer(Colour.Black, interpreter);
-            }
-            winCond = TurnManager(this.p1, this.p2);
+                p2 = new AIPlayer(Colour.Black, interpreter);
+
+            currentPlayer = (p1.Colour == Colour.White) ? p1 : p2;
         }
 
-        private string TurnManager(Player p1, Player p2)
+        public void Start()
         {
+            gui.Draw();
+
             while (board.GameState == GameState.InProgress)
             {
-                p1.DoMove();
-                gui.Draw();
-                p2.DoMove();
+                currentPlayer.DoMove();
+                board.EndTurn();
+                currentPlayer = (board.Turn == p1.Colour) ? p1 : p2;
                 gui.Draw();
             }
+
+            gui.Write(GameOverText());
+        }
+
+        private string GameOverText()
+        {
             switch (board.GameState)
             {
                 case GameState.Tie:
@@ -66,6 +75,7 @@ namespace Tak.Game
                     winCond = "\nInvalid win-condition!";
                     break;
             }
+
             return winCond;
         }
     }
