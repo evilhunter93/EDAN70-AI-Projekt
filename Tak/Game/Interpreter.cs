@@ -47,7 +47,7 @@ namespace Tak.Game
             }
             x = (ch - 'a') - '0';
             ch = input[charCount++];
-            y = ch - 1;
+            y = ch - 1 - '0';
             bool ml = input.Contains("<");
             bool mr = input.Contains(">");
             bool mu = input.Contains("+");
