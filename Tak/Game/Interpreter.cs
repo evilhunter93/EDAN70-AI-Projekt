@@ -1,8 +1,4 @@
-﻿<<<<<<< HEAD
 ﻿using System;
-=======
-using System;
->>>>>>> 73498f1c5fa876e7f9d033fc856e4fb8c16051fc
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,7 +46,7 @@ namespace Tak.Game
                 throw new IllegalInputException("Illegal character given, please specify a lowercase letter for the x-axis");
             }
             x = ch - 'a'; // [A..Z] -> [0..25]
-            ch = input[charCount++];
+            ch = input[++charCount];
             y = ch - '0' - 1; //  [1..X] -> [0..X-1]
             bool ml = input.Contains("<");
             bool mr = input.Contains(">");
