@@ -14,7 +14,7 @@ namespace Tak
             TakGame game = new TakGame(4, "Human", "Human");
             game.Start();
 
-            Console.Write("\nPress any key to exit...");
+            Console.Write("\nPress Enter to exit...");
             Console.ReadLine();
         }
     }
