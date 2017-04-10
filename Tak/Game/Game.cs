@@ -11,6 +11,7 @@ namespace Tak.Game
         GameBoard board;
         Player p1;
         Player p2;
+        String winCond;
 
         public void initialize(int size, String p1, String p2)
         {
@@ -31,7 +32,30 @@ namespace Tak.Game
             {
                 this.p2 = new AIPlayer(Colour.Black);
             }
+            winCond = turnManager(this.p1, this.p2);
         }
 
+        private string turnManager(Player p1, Player p2)
+        {
+            switch (board.GameState)
+            {
+                case InProgress:
+                    p1.doMove();
+                    return turnManager(p2, p1);
+                    break;
+                case Tie:
+                    winCond = "\nTie";
+                    break;
+                case (WR || WF):
+                    winCond = "\nWhite wins!";
+                    break;
+                case (BR || BF):
+                    winCond = "\nBlack wins!";
+                    break;
+                default:
+                    winCond = "\nInvalid win-condition!";
+                    break;
+            }
+        }
     }
 }
