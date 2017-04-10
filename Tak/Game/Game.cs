@@ -39,11 +39,15 @@ namespace Tak.Game
 
         private string turnManager(Player p1, Player p2)
         {
+            while (board.GameState == GameState.InProgress)
+            {
+                p1.DoMove();
+                GUI.draw(board);
+                p2.DoMove();
+                GUI.draw(board);
+            }
             switch (board.GameState)
             {
-                case GameState.InProgress:
-                    p1.DoMove();
-                    return turnManager(p2, p1);
                 case GameState.Tie:
                     winCond = "\nTie";
                     break;
@@ -59,7 +63,6 @@ namespace Tak.Game
                     winCond = "\nInvalid win-condition!";
                     break;
             }
-
             return winCond;
         }
     }
