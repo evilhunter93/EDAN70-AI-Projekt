@@ -27,11 +27,11 @@ namespace TakTest
             board2.PlaceStone(2, 2, new Capstone(Colour.Black));
             board2.PlaceStone(3, 1, new Flatstone(Colour.Black));
 
-            inter1.input("a1");
-            inter1.input("e5");
-            inter1.input("Sb4");
-            inter1.input("Cc3");
-            inter1.input("d2");
+            inter1.Input("a1");
+            inter1.Input("e5");
+            inter1.Input("Sb4");
+            inter1.Input("Cc3");
+            inter1.Input("d2");
 
             Assert.AreEqual(board1, board2);
         }
@@ -45,14 +45,40 @@ namespace TakTest
             board1.Turn = Colour.White;
             board2.Turn = Colour.White;
 
-            board1.PlaceStone(0, 1, new Flatstone(Colour.Black));
-            board1.PlaceStone(0, 0, new Flatstone(Colour.White));
+            board1.PlaceStone(2, 2, new Flatstone(Colour.Black));
+            board1.PlaceStone(2, 1, new Flatstone(Colour.White));
 
-            board2.PlaceStone(0, 1, new Flatstone(Colour.Black));
-            board2.PlaceStone(0, 1, new Flatstone(Colour.White), true);
+            board2.PlaceStone(2, 2, new Flatstone(Colour.Black));
+            board2.PlaceStone(2, 2, new Flatstone(Colour.White), true);
 
-            inter1.input("a1+");
+            inter1.Input("c2+");
+            Assert.AreEqual(board1, board2);
 
+            board1 = new GameBoard(5);
+            board1.Turn = Colour.White;
+            inter1 = new Interpreter(board1);
+            board1.PlaceStone(2, 2, new Flatstone(Colour.Black));
+            board1.PlaceStone(2, 3, new Flatstone(Colour.White));
+
+            inter1.Input("c4-");
+            Assert.AreEqual(board1, board2);
+
+            board1 = new GameBoard(5);
+            board1.Turn = Colour.White;
+            inter1 = new Interpreter(board1);
+            board1.PlaceStone(2, 2, new Flatstone(Colour.Black));
+            board1.PlaceStone(1, 2, new Flatstone(Colour.White));
+
+            inter1.Input("b3>");
+            Assert.AreEqual(board1, board2);
+
+            board1 = new GameBoard(5);
+            board1.Turn = Colour.White;
+            inter1 = new Interpreter(board1);
+            board1.PlaceStone(2, 2, new Flatstone(Colour.Black));
+            board1.PlaceStone(3, 2, new Flatstone(Colour.White));
+
+            inter1.Input("d3<");
             Assert.AreEqual(board1, board2);
         }
 
@@ -86,7 +112,7 @@ namespace TakTest
             board2.PlaceStone(3, 0, new Flatstone(Colour.Black), true);
             board2.PlaceStone(3, 0, new Flatstone(Colour.White), true);
 
-            inter1.input("5a1>122");
+            inter1.Input("5a1>122");
 
             Assert.AreEqual(board1, board2);
         }
