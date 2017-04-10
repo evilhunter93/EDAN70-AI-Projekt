@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,7 +46,7 @@ namespace Tak.Game
                 throw new IllegalInputException("Illegal character given, please specify a lowercase letter for the x-axis");
             }
             x = ch - 'a'; // [A..Z] -> [0..25]
-            ch = input[charCount++];
+            ch = input[++charCount];
             y = ch - '0' - 1; //  [1..X] -> [0..X-1]
             bool ml = input.Contains("<");
             bool mr = input.Contains(">");
@@ -65,15 +65,25 @@ namespace Tak.Game
             }
             if (m)
             {
-                ch = input[charCount += 2];
-                String stackPlace = input.Substring(charCount);
-                int amount = 0;
-                int[] move = new int[stackPlace.Length];
-                foreach (var i in stackPlace)
+                String stackPlace;
+                StoneStack stack;
+                if (input.Length > 3)
                 {
-                    amount += i;
+                    ch = input[charCount += 2];
+                    stackPlace = input.Substring(charCount);
+                    int[] move = new int[stackPlace.Length];
+                    int amount = 0;
+                    foreach (var i in stackPlace)
+                    {
+                        amount += i;
+                    }
+                    stack = boardModel.PickUpStack(x, y, amount);
                 }
-                StoneStack stack = boardModel.PickUpStack(x, y, amount);
+                else
+                {
+                    stackPlace = "1";
+                    stack = boardModel.PickUpStack(x, y);
+                }
                 if (ml)
                 {
                     foreach (var n in stackPlace)
@@ -121,7 +131,7 @@ namespace Tak.Game
             }
             else
             {
-                if (input.Length > 3 || (input.Length > 2 && stoneType.Standing) || input.Length < 2)
+                if (input.Length > 3 || (input.Length > 2 && !stoneType.Standing) || input.Length < 2)
                 {
                     //exception
                     throw new IllegalInputException("Illegal input format for placing new stones");
