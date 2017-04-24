@@ -33,7 +33,9 @@ namespace Tak.GUI
 
         }
 
-        /** Witchcraft. Don't touch.*/
+        /// <summary>
+        /// Witchcraft. Don't touch please.
+        /// </summary>
         public void Draw()
         {
             string text = "";
