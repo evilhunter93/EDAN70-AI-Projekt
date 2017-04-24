@@ -156,5 +156,9 @@ namespace Tak.Game
                 boardModel.PlaceStone(x, y, stoneType);
             }
         }
+        public void Rollback()
+        {
+
+        }
     }
 }

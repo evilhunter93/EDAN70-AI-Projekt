@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tak.Exceptions;
 using Tak.Game;
 using Tak.GUI;
 
@@ -47,10 +48,21 @@ namespace Tak.Game
 
             while (board.GameState == GameState.InProgress)
             {
-                currentPlayer.DoMove();
-                board.EndTurn();
-                currentPlayer = (board.Turn == p1.Colour) ? p1 : p2;
-                gui.Draw();
+                try
+                {
+                    currentPlayer.DoMove();
+                    board.EndTurn();
+                    currentPlayer = (board.Turn == p1.Colour) ? p1 : p2;
+                    gui.Draw();
+                }
+                catch (IllegalInputException e)
+                {
+                    Console.WriteLine(e.Message + "\nPlease choose a new move to perform");
+                }
+                catch (IllegalMoveException d)
+                {
+                    Console.WriteLine(d.Message + "\nPlease choose a new move to perform");
+                }
             }
 
             gui.Write(GameOverText());
