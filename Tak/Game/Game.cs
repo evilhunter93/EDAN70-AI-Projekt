@@ -94,6 +94,7 @@ namespace Tak.Game
 
             return winCond;
         }
+
         private void Rollback()
         {
             board.Stacks = stacks;
