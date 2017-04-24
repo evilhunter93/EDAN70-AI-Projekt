@@ -48,7 +48,7 @@ namespace Tak.Game
         {
             if (size < 3 || size > 8)
                 throw new TakException("Minimum board size is 3. Maximum board size is 8.");
-            turn = Colour.Black;
+            turn = Colour.White;
             this.size = size;
             stacks = new StoneStack[size, size];
             state = GameState.InProgress;

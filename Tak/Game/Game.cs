@@ -45,8 +45,12 @@ namespace Tak.Game
 
         public void Start()
         {
-            gui.Draw();
             stacks = board.Stacks;
+            SetupRounds();
+
+            board.Turn = Colour.White;
+            gui.Draw();
+
             while (board.GameState == GameState.InProgress)
             {
                 try
@@ -70,6 +74,38 @@ namespace Tak.Game
             }
 
             gui.Write(GameOverText());
+        }
+
+        private void SetupRounds()
+        {
+            board.Turn = Colour.Black;
+            int turns = 2;
+            currentPlayer = (board.Turn == p1.Colour) ? p2 : p1;
+            gui.Draw();
+
+            while (board.GameState == GameState.InProgress && turns > 0)
+            {
+                try
+                {
+                    currentPlayer.DoMove();
+                    board.EndTurn();
+                    stacks = board.Stacks;
+                    currentPlayer = (board.Turn == p1.Colour) ? p2 : p1;
+                    gui.Draw();
+                    turns--;
+                }
+                catch (IllegalInputException e)
+                {
+                    Rollback();
+                    Console.WriteLine(e.Message + "\nPlease choose a new move to perform");
+                }
+                catch (IllegalMoveException d)
+                {
+                    Rollback();
+                    Console.WriteLine(d.Message + "\nPlease choose a new move to perform");
+                }
+            }
+
         }
 
         private string GameOverText()
