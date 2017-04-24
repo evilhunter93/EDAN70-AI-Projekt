@@ -39,19 +39,19 @@ namespace Tak.GUI
             StoneStack[,] stacks = gameBoard.Stacks;
             Stone s;
 
-            for (int row = 0; row < size; row++)
+            for (int col = size - 1; col >= 0; col--)
             {
-                for (int squareRow = 0; squareRow < SQUARE_SIZE; squareRow++)
+                for (int squareCol = SQUARE_SIZE - 1; squareCol >= 0; squareCol--)
                 {
-                    for (int col = 0; col < size; col++)
+                    for (int row = 0; row < size; row++)
                     {
-                        for (int squareCol = 0; squareCol < SQUARE_SIZE; squareCol++)
+                        for (int squareRow = 0; squareRow < SQUARE_SIZE; squareRow++)
                         {
                             if (stacks[row, col].Count > 0)
                             {
                                 s = stacks[row, col].PopStone();
                                 text += StoneSymbol(s);
-                                if (squareRow == SQUARE_SIZE - 1 && squareCol == SQUARE_SIZE - 1 && stacks[row, col].Count > 0)
+                                if (squareRow == SQUARE_SIZE - 1 && squareCol == 0 && stacks[row, col].Count > 0)
                                     text += "+";
                                 else
                                     text += " ";
@@ -61,12 +61,12 @@ namespace Tak.GUI
                                 text += blank + " ";
                             }
                         }
-                        if (col < size - 1)
+                        if (row < size - 1)
                             text += colSeparator + " ";
                     }
                     text += "\n";
                 }
-                if (row < size - 1)
+                if (col > 0)
                     text += rowSeparator;
                 text += "\n";
             }
