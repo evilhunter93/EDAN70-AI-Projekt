@@ -46,14 +46,14 @@ namespace Tak.Game
         public void Start()
         {
             gui.Draw();
-
+            stacks = board.Stacks;
             while (board.GameState == GameState.InProgress)
             {
-                stacks = board.Stacks;
                 try
                 {
                     currentPlayer.DoMove();
                     board.EndTurn();
+                    stacks = board.Stacks;
                     currentPlayer = (board.Turn == p1.Colour) ? p1 : p2;
                     gui.Draw();
                 }
