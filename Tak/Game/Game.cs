@@ -12,6 +12,7 @@ namespace Tak.Game
     public class TakGame
     {
         GameBoard board;
+        StoneStack[,] stacks;
         Player p1;
         Player p2;
         Player currentPlayer;
@@ -48,6 +49,7 @@ namespace Tak.Game
 
             while (board.GameState == GameState.InProgress)
             {
+                stacks = board.Stacks;
                 try
                 {
                     currentPlayer.DoMove();
@@ -57,10 +59,12 @@ namespace Tak.Game
                 }
                 catch (IllegalInputException e)
                 {
+                    Rollback();
                     Console.WriteLine(e.Message + "\nPlease choose a new move to perform");
                 }
                 catch (IllegalMoveException d)
                 {
+                    Rollback();
                     Console.WriteLine(d.Message + "\nPlease choose a new move to perform");
                 }
             }
@@ -89,6 +93,10 @@ namespace Tak.Game
             }
 
             return winCond;
+        }
+        private void Rollback()
+        {
+
         }
     }
 }
