@@ -96,7 +96,7 @@ namespace Tak.Game
         }
         private void Rollback()
         {
-
+            board.Stacks = stacks;
         }
     }
 }
