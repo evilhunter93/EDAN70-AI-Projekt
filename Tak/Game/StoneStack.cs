@@ -30,20 +30,23 @@ namespace Tak.Game
                 stones.Push(stone);
         }
 
-        public void AddStone(Stone stone)
+        public void AddStone(Stone stone, bool pickUp = false)
         {
-            if (Count > 0)
+            if (!pickUp)
             {
-                if (Top is Capstone)
-                    throw new IllegalMoveException("\nCan not place stone on capstone.");
-
-                if (!(stone is Capstone))
+                if (Count > 0)
                 {
-                    if (Top.Standing)
-                        throw new IllegalMoveException("\nCan not place non-capstone on standingstone.");
+                    if (Top is Capstone)
+                        throw new IllegalMoveException("\nCan not place stone on capstone.");
+
+                    if (!(stone is Capstone))
+                    {
+                        if (Top.Standing)
+                            throw new IllegalMoveException("\nCan not place non-capstone on standingstone.");
+                    }
+                    else
+                        stones.Peek().Standing = false;
                 }
-                else
-                    stones.Peek().Standing = false;
             }
             stones.Push(stone);
         }
@@ -67,7 +70,7 @@ namespace Tak.Game
             StoneStack temp = new StoneStack();
             for (int i = 0; i < nbr; i++)
             {
-                temp.AddStone(stones.Pop());
+                temp.AddStone(stones.Pop(), true);
             }
             return temp;
         }
