@@ -214,5 +214,22 @@ namespace TakTests
 
             Assert.AreEqual(board1, board2);
         }
+
+        [TestMethod]
+        public void StandingRoad()
+        {
+            GameBoard board = new GameBoard(5);
+            Stone standingStone = new Flatstone(Colour.White);
+            standingStone.Standing = true;
+            board.PlaceStone(0, 0, standingStone);
+            board.PlaceStone(1, 0, standingStone);
+            board.PlaceStone(2, 0, standingStone);
+            board.PlaceStone(3, 0, standingStone);
+            board.PlaceStone(4, 0, standingStone);
+
+            board.EndTurn();
+
+            Assert.AreEqual(board.GameState, GameState.InProgress);
+        }
     }
 }
