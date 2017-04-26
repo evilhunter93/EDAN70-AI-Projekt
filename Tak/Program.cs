@@ -11,7 +11,7 @@ namespace Tak
     {
         static void Main(string[] args)
         {
-            TakGame game = new TakGame(4, "Human", "Human");
+            TakGame game = new TakGame(5, "Human", "Human");
             game.Start();
 
             Console.Write("\nPress Enter to exit...");
