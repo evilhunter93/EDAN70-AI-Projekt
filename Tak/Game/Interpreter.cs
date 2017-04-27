@@ -10,6 +10,7 @@ namespace Tak.Game
     public class Interpreter
     {
         private GameBoard boardModel;
+        delegate char IncrementCharCount(int n = 1);
 
         public Interpreter(GameBoard boardModel)
         {
@@ -18,13 +19,28 @@ namespace Tak.Game
 
         public void Input(String input)
         {
+            if (input.ToLower() == "exit")
+                Environment.Exit(0);
+
             Stone stoneType;
             int x;
             int y;
             int charCount = 0;
+            IncrementCharCount increment = n =>
+            {
+                try
+                {
+                    return input[charCount += n];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    throw new IllegalInputException("Malformed input.");
+                }
+            };
             int amount = 1;
             char ch;
             ch = input[charCount];
+
             switch (ch)
             {
                 case 'S':
@@ -46,7 +62,7 @@ namespace Tak.Game
                 if (ch > '0')
                 {
                     amount = ch - '0';
-                    ch = input[++charCount];
+                    ch = increment();
                 }
                 else
                 {
@@ -55,7 +71,7 @@ namespace Tak.Game
                 }
             }
             x = ch - 'a'; // [A..Z] -> [0..25]
-            ch = input[++charCount];
+            ch = increment();
             y = ch - '0' - 1; //  [1..X] -> [0..X-1]
             bool ml = input.Contains("<");
             bool mr = input.Contains(">");
@@ -79,7 +95,10 @@ namespace Tak.Game
                 int[] move = new int[1];
                 if (input.Length > 3)
                 {
-                    ch = input[charCount += 2];
+                    if (input.Length - charCount < 3)
+                        throw new IllegalInputException("Malformed pick-up/put-down format.");
+
+                    ch = increment(2);
                     stackPlace = input.Substring(charCount);
                     move = new int[stackPlace.Length];
                     int amountCh = 0;
@@ -155,10 +174,6 @@ namespace Tak.Game
                 }
                 boardModel.PlaceStone(x, y, stoneType);
             }
-        }
-        public void Rollback()
-        {
-
         }
     }
 }
