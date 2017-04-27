@@ -12,7 +12,11 @@ namespace Tak.Game
 
         public override void DoMove()
         {
-            string move = PromptInput();
+            string move;
+            do
+            {
+                move = PromptInput();
+            } while (move.Count() == 0);
             interpreter.Input(move);
         }
 
