@@ -10,6 +10,7 @@ namespace Tak.Game
     {
         private Colour colour;
         protected bool standing;
+        protected bool road;
 
         public Colour Colour { get { return colour; } }
 
@@ -18,6 +19,8 @@ namespace Tak.Game
             get { return standing; }
             set { /* FIXME: don't want set here */ }
         }
+
+        public virtual bool Road { get { return road; } }
 
         protected Stone(Colour colour, bool standing)
         {

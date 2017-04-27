@@ -8,7 +8,10 @@ namespace Tak.Game
 {
     public class Capstone : Stone
     {
-        public Capstone(Colour c) : base(c, true) { }
+        public Capstone(Colour c) : base(c, true)
+        {
+            road = true;
+        }
 
 
         public override bool Equals(object obj)

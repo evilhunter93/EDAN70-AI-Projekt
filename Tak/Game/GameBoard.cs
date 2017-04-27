@@ -220,6 +220,9 @@ namespace Tak.Game
             if (visited[x, y])
                 return false;
 
+            if (!stacks[x, y].Top.Road)
+                return false;
+
             visited[x, y] = true;
 
             if (Math.Abs(x - x0) == (size - 1) || Math.Abs(y - y0) == (size - 1)) // Opposite side reached
