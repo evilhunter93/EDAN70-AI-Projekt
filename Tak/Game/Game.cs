@@ -43,7 +43,7 @@ namespace Tak.Game
             currentPlayer = (p1.Colour == Colour.White) ? p1 : p2;
         }
 
-        public void Start()
+        public void Run()
         {
             stacks = board.Stacks;
             SetupRounds();
