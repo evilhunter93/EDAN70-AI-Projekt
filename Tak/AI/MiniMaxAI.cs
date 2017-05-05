@@ -64,21 +64,23 @@ namespace Tak.AI
             GameBoard nBoard = node.board;
             new Interpreter(nBoard).Input(node.move);
             int nScore = EvaluationFunction(node);
-            if (nBoard.GameState != GameState.InProgress)
-                return nScore;
-
+            GameState gs = nBoard.GameState;
+            if (gs != GameState.InProgress)
+            {
+                if (((gs == GameState.BF || gs == GameState.BR) && colour == Colour.Black) || ((gs == GameState.WF || gs == GameState.WR) && colour == Colour.White))
+                    return nScore += 100;
+                else if (gs == GameState.Tie)
+                    return nScore;
+                else
+                    return nScore -= 100;
+            }
             // Find all valid moves
             moves = nBoard.ValidMoves(nBoard.Turn);
             nodes = new List<Node>();
 
             // For each valid move
             // Create a node
-            foreach (string move in moves)
-            {
-                GameBoard newBoard = nBoard.Clone();
-                newBoard.EndTurn();
-                nodes.Add(new Node(newBoard, move));
-            }
+            NodeInsertion(moves, nodes, nBoard);
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node newNode;
@@ -97,7 +99,7 @@ namespace Tak.AI
 
         private int Max(Node node)
         {
-            List<String> moves = new List<String>();
+            List<String> moves;
             List<Node> nodes;
             GameBoard nBoard = node.board;
             new Interpreter(nBoard).Input(node.move);
@@ -119,12 +121,7 @@ namespace Tak.AI
 
             // For each valid move
             // Create a node
-            foreach (string move in moves)
-            {
-                GameBoard newBoard = nBoard.Clone();
-                newBoard.EndTurn();
-                nodes.Add(new Node(newBoard, move));
-            }
+            NodeInsertion(moves, nodes, nBoard);
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node newNode;
@@ -139,6 +136,16 @@ namespace Tak.AI
                     max = temp;
             }
             return max;
+        }
+
+        private static void NodeInsertion(List<string> moves, List<Node> nodes, GameBoard nBoard)
+        {
+            foreach (string move in moves)
+            {
+                GameBoard newBoard = nBoard.Clone();
+                newBoard.EndTurn();
+                nodes.Add(new Node(newBoard, move));
+            }
         }
 
         private int EvaluationFunction(Node node)
