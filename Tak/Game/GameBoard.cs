@@ -5,10 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Tak.Utilities;
 using Tak.Exceptions;
+using System.Collections;
 
 public enum GameState
 {
     WR, BR, WF, BF, Tie, InProgress
+}
+
+public enum Direction
+{
+    UP, DOWN, LEFT, RIGHT
 }
 
 namespace Tak.Game
@@ -64,7 +70,8 @@ namespace Tak.Game
 
         public void PlaceStone(int x, int y, Stone stone, bool existing = false)
         {
-            CheckIndex(x, y);
+            if (!ValidIndex(x, y))
+                throw new IllegalMoveException("\nIndex [" + x + ", " + y + "] is out of bounds");
 
             if (existing)
                 stacks[x, y].AddStone(stone);
@@ -72,13 +79,17 @@ namespace Tak.Game
             {
                 if (stone.Colour == Colour.White)
                 {
-                    whiteStones.CheckReserve(stone);
+                    if (!whiteStones.CheckReserve(stone))
+                        throw new IllegalMoveException("No more " + (stone is Capstone ? "capstones" : "flatstones") + " in the reserve.");
+
                     stacks[x, y].NewStone(stone);
                     whiteStones.Decrement(stone);
                 }
                 else if (stone.Colour == Colour.Black)
                 {
-                    blackStones.CheckReserve(stone);
+                    if (!blackStones.CheckReserve(stone))
+                        throw new IllegalMoveException("No more " + (stone is Capstone ? "capstones" : "flatstones") + " in the reserve.");
+
                     stacks[x, y].NewStone(stone);
                     blackStones.Decrement(stone);
                 }
@@ -91,8 +102,10 @@ namespace Tak.Game
 
         public StoneStack PickUpStack(int x, int y, int amount = UNSPECIFIED)
         {
-            CheckIndex(x, y);
-            CheckOwner(x, y);
+            if (!ValidIndex(x, y))
+                throw new IllegalMoveException("\nIndex [" + x + ", " + y + "] is out of bounds");
+            if (!CurrentPlayerIsOwner(x, y))
+                throw new IllegalMoveException("\nCurrent player does not control the stack at [" + x + ", " + y + "].");
 
             if (amount == UNSPECIFIED)
             {
@@ -153,6 +166,114 @@ namespace Tak.Game
             return true;
         }
 
+        public ArrayList ValidMoves(Colour player)
+        {
+            ArrayList validMoves = new ArrayList();
+            StoneReserve stones;
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                {
+                    string coords = CoordsToString(i, j);
+                    if (stacks[i, j].Count == 0)
+                    {
+                        if (player == Colour.White)
+                            stones = whiteStones;
+                        else if (player == Colour.Black)
+                            stones = blackStones;
+                        else
+                            throw new TakException("Colour not recognised.");
+
+                        if (stones.CheckReserve(new Flatstone(player)))
+                        {
+                            validMoves.Add(coords);
+                            validMoves.Add("S" + coords);
+                        }
+
+                        if (stones.CheckReserve(new Capstone(player)))
+                            validMoves.Add("C" + coords);
+                    }
+                    else
+                    {
+                        if (player == stacks[i, j].Owner)
+                        {
+                            for (int nbrPickUp = 1; nbrPickUp <= size; nbrPickUp++)
+                            {
+                                if (nbrPickUp > stacks[i, j].Count)
+                                    break;
+
+                                string move = nbrPickUp + coords;
+                                // pick up nbrPickUp
+                                foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+                                {
+                                    int iStep = 0, jStep = 0;
+                                    switch (direction)
+                                    {
+                                        case Direction.UP:
+                                            move += "+";
+                                            jStep = 1;
+                                            break;
+                                        case Direction.DOWN:
+                                            move += "-";
+                                            jStep = -1;
+                                            break;
+                                        case Direction.LEFT:
+                                            move += "<";
+                                            iStep = -1;
+                                            break;
+                                        case Direction.RIGHT:
+                                            move += ">";
+                                            iStep = 1;
+                                            break;
+                                        default:
+                                            throw new TakException("Direction not recognised.");
+                                    }
+                                    for (int dist = 1; dist <= nbrPickUp; dist++)
+                                    {
+                                        if (!ValidIndex(i + iStep * dist, j + jStep * dist))
+                                            break;
+
+                                        PutDown(nbrPickUp, dist, move, ref validMoves);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            return validMoves;
+        }
+
+        private void PutDown(int pickUp, int dist, string prefix, ref ArrayList moves)
+        {
+            for (int i = 1; i <= pickUp - dist + 1; i++)
+            {
+                string move = prefix;
+                PutDownR(pickUp - i, dist - 1, ref move);
+                moves.Add(move);
+            }
+        }
+
+        private void PutDownR(int pickUp, int dist, ref string move)
+        {
+            if (dist < 1)
+                throw new TakException("Error in PutDownR() ! ! ! ");
+            if (dist == 1)
+            {
+                move += pickUp;
+            }
+            else
+                for (int i = 1; i <= pickUp - dist + 1; i++)
+                {
+                    move += i;
+                    PutDownR(pickUp - i, dist - 1, ref move);
+                }
+        }
+
+        private string CoordsToString(int i, int j)
+        {
+            throw new NotImplementedException();
+        }
 
         private void UpdateGameState()
         {
@@ -244,16 +365,18 @@ namespace Tak.Game
             return true;
         }
 
-        private void CheckOwner(int x, int y)
+        private bool CurrentPlayerIsOwner(int x, int y)
         {
             if (stacks[x, y].Owner != turn)
-                throw new IllegalMoveException("\nCurrent player does not control the stack at [" + x + ", " + y + "].");
+                return false;
+            return true;
         }
 
-        private void CheckIndex(int x, int y)
+        private bool ValidIndex(int x, int y)
         {
             if (x < 0 || x >= size || y < 0 || y >= size)
-                throw new IllegalMoveException("\nIndex [" + x + ", " + y + "] is out of bounds");
+                return false;
+            return true;
         }
 
         private class StoneReserve
@@ -280,20 +403,22 @@ namespace Tak.Game
                     flatstones = (size - 3) * 10;
             }
 
-            internal void CheckReserve(Stone stone)
+            internal bool CheckReserve(Stone stone)
             {
                 if (stone is Capstone)
                 {
                     if (capstones < 1)
-                        throw new IllegalMoveException("No more capstones in the reserve.");
+                        return false;
                 }
                 else if (stone is Flatstone)
                 {
                     if (flatstones < 1)
-                        throw new IllegalMoveException("No more flat stones in the reserve.");
+                        return false;
                 }
                 else
                     throw new TakException("Stone not recognised");
+
+                return true;
             }
 
             internal void Decrement(Stone stone)
