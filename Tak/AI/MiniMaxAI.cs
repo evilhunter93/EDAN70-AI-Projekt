@@ -45,7 +45,7 @@ namespace Tak.AI
             {
                 node = (Node)nodes[0];
                 nodes.Remove(node);
-                temp = min(node);
+                temp = Min(node, 0);
                 if (temp < min)
                 {
                     bestMove = node.move;
@@ -54,7 +54,7 @@ namespace Tak.AI
             return bestMove;
         }
 
-        private int Min(Node node)
+        private int Min(Node node, int score)
         {
             String[] moves;
             System.Collections.ArrayList nodes;
@@ -78,14 +78,14 @@ namespace Tak.AI
             {
                 newNode = (Node)nodes[0];
                 nodes.Remove(newNode);
-                temp = Max(newNode);
+                temp = score + Max(newNode, score);
                 if (temp < min)
                     min = temp;
             }
             return min;
         }
 
-        private int Max(Node node)
+        private int Max(Node node, int score)
         {
             String[] moves;
             System.Collections.ArrayList nodes;
@@ -109,7 +109,7 @@ namespace Tak.AI
             {
                 newNode = (Node)nodes[0];
                 nodes.Remove(newNode);
-                temp = Min(newNode);
+                temp = score + Min(newNode, score);
                 if (temp > max)
                     max = temp;
             }
