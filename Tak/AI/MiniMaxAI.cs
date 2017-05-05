@@ -37,7 +37,7 @@ namespace Tak.AI
             // Create a node
             foreach (string move in moves)
             {
-                nodes.Add(new Node(board.Clone().endTurn(), move));
+                nodes.Add(new Node(board.Clone(), move));
             }
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
@@ -62,6 +62,7 @@ namespace Tak.AI
             List<String> moves;
             List<Node> nodes;
             GameBoard nBoard = node.board;
+            new Interpreter(nBoard).Input(node.move);
             int nScore = EvaluationFunction(node);
             if (nBoard.GameState != GameState.InProgress)
                 return nScore;
@@ -97,6 +98,7 @@ namespace Tak.AI
             List<String> moves = new List<String>();
             List<Node> nodes;
             GameBoard nBoard = node.board;
+            new Interpreter(nBoard).Input(node.move);
             int nScore = EvaluationFunction(node);
             GameState gs = nBoard.GameState;
             if (gs != GameState.InProgress)
