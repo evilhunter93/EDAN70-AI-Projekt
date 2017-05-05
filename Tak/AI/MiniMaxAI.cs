@@ -46,7 +46,7 @@ namespace Tak.AI
             {
                 node = (Node)nodes[0];
                 nodes.Remove(node);
-                temp = Min(node, 0);
+                temp = Min(node);
                 if (temp < min)
                 {
                     bestMove = node.move;
@@ -55,11 +55,12 @@ namespace Tak.AI
             return bestMove;
         }
 
-        private int Min(Node node, int score)
+        private int Min(Node node)
         {
             List<String> moves;
             List<Node> nodes;
             GameBoard nBoard = node.board;
+            int nScore = EvaluationFunction(node);
 
             // Find all valid moves
             moves = nBoard.ValidMoves(nBoard.Turn);
@@ -80,18 +81,19 @@ namespace Tak.AI
             {
                 newNode = (Node)nodes[0];
                 nodes.Remove(newNode);
-                temp = score + Max(newNode, score);
+                temp = nScore + Max(newNode);
                 if (temp < min)
                     min = temp;
             }
             return min;
         }
 
-        private int Max(Node node, int score)
+        private int Max(Node node)
         {
             List<String> moves = new List<String>();
             List<Node> nodes;
             GameBoard nBoard = node.board;
+            int nScore = EvaluationFunction(node);
 
             // Find all valid moves
             moves = nBoard.ValidMoves(nBoard.Turn);
@@ -112,11 +114,16 @@ namespace Tak.AI
             {
                 newNode = (Node)nodes[0];
                 nodes.Remove(newNode);
-                temp = score + Min(newNode, score);
+                temp = nScore + Min(newNode);
                 if (temp > max)
                     max = temp;
             }
             return max;
+        }
+
+        private int EvaluationFunction(Node node)
+        {
+            return 0;
         }
 
         class Node
