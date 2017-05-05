@@ -37,7 +37,7 @@ namespace Tak.AI
             // Create a node
             foreach (string move in moves)
             {
-                nodes.Add(new Node(board.Clone(), move));
+                nodes.Add(new Node(board.Clone().endTurn(), move));
             }
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
@@ -63,6 +63,8 @@ namespace Tak.AI
             List<Node> nodes;
             GameBoard nBoard = node.board;
             int nScore = EvaluationFunction(node);
+            if (nBoard.GameState != GameState.InProgress)
+                return nScore;
 
             // Find all valid moves
             moves = nBoard.ValidMoves(nBoard.Turn);
@@ -72,7 +74,7 @@ namespace Tak.AI
             // Create a node
             foreach (string move in moves)
             {
-                nodes.Add(new Node(nBoard.Clone(), move));
+                nodes.Add(new Node(nBoard.Clone().endTurn, move));
             }
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
@@ -96,6 +98,16 @@ namespace Tak.AI
             List<Node> nodes;
             GameBoard nBoard = node.board;
             int nScore = EvaluationFunction(node);
+            GameState gs = nBoard.GameState;
+            if (gs != GameState.InProgress)
+            {
+                if (((gs == GameState.BF || gs == GameState.BR) && colour == Colour.Black) || ((gs == GameState.WF || gs == GameState.WR) && colour == Colour.White))
+                    return nScore += 100;
+                else if (gs == GameState.Tie)
+                    return nScore;
+                else
+                    return nScore -= 100;
+            }
 
             // Find all valid moves
             moves = nBoard.ValidMoves(nBoard.Turn);
@@ -105,7 +117,7 @@ namespace Tak.AI
             // Create a node
             foreach (string move in moves)
             {
-                nodes.Add(new Node(nBoard.Clone(), move));
+                nodes.Add(new Node(nBoard.Clone().endTurn, move));
             }
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
