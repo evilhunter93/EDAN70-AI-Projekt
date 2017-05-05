@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,23 +17,23 @@ namespace Tak.AI
         }
         public string BestMove()
         {
-            String move = MinMax();
+            string move = MinMax();
             throw new NotImplementedException();
         }
 
-        private String MinMax()
+        private string MinMax()
         {
-            String bestMove = null;
-            String[] moves;
-            System.Collections.ArrayList nodes;
+            string bestMove = null;
+            ArrayList moves = new ArrayList();
+            ArrayList nodes;
 
             // Find all valid moves
-            moves = board.validMoves();
-            nodes = new System.Collections.ArrayList();
+            moves = board.ValidMoves(board.Turn);
+            nodes = new ArrayList();
 
             // For each valid move
             // Create a node
-            foreach (String move in moves)
+            foreach (string move in moves)
             {
                 nodes.Add(new Node(board, move));
             }
@@ -56,16 +57,16 @@ namespace Tak.AI
 
         private int Min(Node node, int score)
         {
-            String[] moves;
-            System.Collections.ArrayList nodes;
+            ArrayList moves;
+            ArrayList nodes;
 
             // Find all valid moves
-            moves = board.validMoves();
-            nodes = new System.Collections.ArrayList();
+            moves = board.ValidMoves(node.board.Turn);
+            nodes = new ArrayList();
 
             // For each valid move
             // Create a node
-            foreach (String move in moves)
+            foreach (string move in moves)
             {
                 nodes.Add(new Node(board, move));
             }
@@ -87,18 +88,18 @@ namespace Tak.AI
 
         private int Max(Node node, int score)
         {
-            String[] moves;
-            System.Collections.ArrayList nodes;
+            ArrayList moves = new ArrayList();
+            ArrayList nodes;
 
             // Find all valid moves
-            moves = board.validMoves();
-            nodes = new System.Collections.ArrayList();
+            moves = board.ValidMoves(node.board.Turn);
+            nodes = new ArrayList();
 
             // For each valid move
             // Create a node
-            foreach (String move in moves)
+            foreach (string move in moves)
             {
-                nodes.Add(new Node(board, move));
+                nodes.Add(new Node(node.board, move));
             }
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
@@ -116,12 +117,12 @@ namespace Tak.AI
             return max;
         }
 
-        private class Node
+        class Node
         {
-            GameBoard board;
-            int score;
-            bool end;
-            string move;
+            internal GameBoard board;
+            internal int score;
+            internal bool end;
+            internal string move;
 
             internal Node(GameBoard board, string move)
             {
