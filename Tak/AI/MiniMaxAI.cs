@@ -10,10 +10,12 @@ namespace Tak.AI
 {
     class MiniMaxAI : AI
     {
+        Colour colour;
         private GameBoard board;
         public MiniMaxAI(GameBoard board)
         {
             this.board = board;
+            colour = board.Turn;
         }
         public string BestMove()
         {
@@ -122,6 +124,19 @@ namespace Tak.AI
         }
 
         private int EvaluationFunction(Node node)
+        {
+            int score = node.score;
+            score += EvaluateStack(node.board);
+            score += EvaluateTopPiece(node.board);
+            return score;
+        }
+
+        private int EvaluateStack(GameBoard board)
+        {
+            return 0;
+        }
+
+        private int EvaluateTopPiece(GameBoard board)
         {
             return 0;
         }
