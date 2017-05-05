@@ -105,7 +105,7 @@ namespace Tak.AI
             // Create a node
             foreach (string move in moves)
             {
-                nodes.Add(new Node(nBoard, move));
+                nodes.Add(new Node(nBoard.Clone(), move));
             }
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
