@@ -71,6 +71,10 @@ namespace Tak.Game
                     Rollback();
                     Console.WriteLine(d.Message + "\nPlease choose a new move to perform");
                 }
+                catch (TakException e)
+                {
+                    Console.WriteLine(e.Message + "\nPlease choose a new move to perform");
+                }
             }
 
             gui.Write(GameOverText());
@@ -99,10 +103,14 @@ namespace Tak.Game
                     Rollback();
                     Console.WriteLine(e.Message + "\nPlease choose a new move to perform");
                 }
-                catch (IllegalMoveException d)
+                catch (IllegalMoveException e)
                 {
                     Rollback();
-                    Console.WriteLine(d.Message + "\nPlease choose a new move to perform");
+                    Console.WriteLine(e.Message + "\nPlease choose a new move to perform");
+                }
+                catch (TakException e)
+                {
+                    Console.WriteLine(e.Message + "\nPlease choose a new move to perform");
                 }
             }
 
