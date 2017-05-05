@@ -66,7 +66,20 @@ namespace Tak.Game
                     stacks[x, y] = new StoneStack();
         }
 
+        private GameBoard(GameBoard other)
+        {
+            size = other.size;
+            stacks = other.Stacks; // deep copy
+            state = other.state;
+            turn = other.turn;
+            whiteStones = other.whiteStones.Clone();
+            blackStones = other.blackStones.Clone();
+        }
 
+        public GameBoard Clone()
+        {
+            return new GameBoard(this);
+        }
 
         public void PlaceStone(int x, int y, Stone stone, bool existing = false)
         {
@@ -246,7 +259,31 @@ namespace Tak.Game
                         }
                     }
                 }
+            RemoveInvalidMoves(ref validMoves);
             return validMoves;
+        }
+
+        private void RemoveInvalidMoves(ref List<string> validMoves)
+        {
+            validMoves.RemoveAll(move =>
+            {
+                GameBoard testBoard = Clone();
+                Interpreter interp = new Interpreter(testBoard);
+                try
+                {
+                    interp.Input(move);
+                    return false;
+                }
+                catch (IllegalMoveException)
+                {
+                    return true;
+                }
+                catch (IllegalInputException e)
+                {
+                    Console.Write("\nInvalid move: " + move + "\n");
+                    throw e;
+                }
+            });
         }
 
         private void PutDownR(int pickUp, int dist, string move, ref List<string> moves, bool singleMove = false)
@@ -379,11 +416,6 @@ namespace Tak.Game
             return true;
         }
 
-        public GameBoard Clone()
-        {
-            throw new NotImplementedException();
-        }
-
         private class StoneReserve
         {
             private int flatstones;
@@ -406,6 +438,17 @@ namespace Tak.Game
                     flatstones = 21;
                 else
                     flatstones = (size - 3) * 10;
+            }
+
+            StoneReserve(StoneReserve other)
+            {
+                flatstones = other.flatstones;
+                capstones = other.capstones;
+            }
+
+            internal StoneReserve Clone()
+            {
+                return new StoneReserve(this);
             }
 
             internal bool CheckReserve(Stone stone)
