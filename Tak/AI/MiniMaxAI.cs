@@ -24,12 +24,12 @@ namespace Tak.AI
         private string MinMax()
         {
             string bestMove = null;
-            ArrayList moves = new ArrayList();
-            ArrayList nodes;
+            List<String> moves = new List<String>();
+            List<Node> nodes;
 
             // Find all valid moves
             moves = board.ValidMoves(board.Turn);
-            nodes = new ArrayList();
+            nodes = new List<Node>();
 
             // For each valid move
             // Create a node
@@ -57,13 +57,13 @@ namespace Tak.AI
 
         private int Min(Node node, int score)
         {
-            ArrayList moves;
-            ArrayList nodes;
+            List<String> moves;
+            List<Node> nodes;
             GameBoard nBoard = node.board;
 
             // Find all valid moves
             moves = nBoard.ValidMoves(nBoard.Turn);
-            nodes = new ArrayList();
+            nodes = new List<Node>();
 
             // For each valid move
             // Create a node
@@ -89,13 +89,13 @@ namespace Tak.AI
 
         private int Max(Node node, int score)
         {
-            ArrayList moves = new ArrayList();
-            ArrayList nodes;
+            List<String> moves = new List<String>();
+            List<Node> nodes;
             GameBoard nBoard = node.board;
 
             // Find all valid moves
             moves = nBoard.ValidMoves(nBoard.Turn);
-            nodes = new ArrayList();
+            nodes = new List<Node>();
 
             // For each valid move
             // Create a node
