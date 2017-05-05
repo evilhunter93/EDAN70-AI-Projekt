@@ -133,12 +133,44 @@ namespace Tak.AI
 
         private int EvaluateStack(GameBoard board)
         {
-            return 0;
+            int score = 0;
+            StoneStack[,] stacks = board.Stacks;
+            foreach (StoneStack stack in stacks)
+            {
+                if (stack.Count > 0)
+                {
+                    if (stack.Owner == colour)
+                    {
+                        score += stack.Count;
+                    }
+                    else
+                    {
+                        score -= stack.Count;
+                    }
+                }
+            }
+            return score;
         }
 
         private int EvaluateTopPiece(GameBoard board)
         {
-            return 0;
+            int score = 0;
+            StoneStack[,] stacks = board.Stacks;
+            foreach (StoneStack stack in stacks)
+            {
+                if (stack.Count > 0)
+                {
+                    if (stack.Owner == colour)
+                    {
+                        score += 1;
+                    }
+                    else
+                    {
+                        score -= 1;
+                    }
+                }
+            }
+            return score;
         }
 
         class Node
