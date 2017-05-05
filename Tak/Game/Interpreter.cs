@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,10 +18,19 @@ namespace Tak.Game
             this.boardModel = boardModel;
         }
 
-        public void Input(String input)
+        public void Input(string input)
         {
             if (input.ToLower() == "exit")
                 Environment.Exit(0);
+
+            if (input.ToLower() == "valid")
+            {
+                List<string> validMoves = boardModel.ValidMoves(boardModel.Turn);
+                //Console.WriteLine(validMoves);
+                validMoves.ForEach(move => Console.Write("{0} ", move));
+                throw new TakException("\nPrinting valid moves.");
+            }
+
 
             Stone stoneType;
             int x;
