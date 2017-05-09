@@ -133,8 +133,9 @@ namespace Tak.AI
                 board = nBoard;
                 move = nMove;
                 new Interpreter(board).Input(move);
+                turn = board.Turn;
+                board.EndTurn();
                 moves = board.ValidMoves(board.Turn);
-                turn = (board.Turn == Colour.Black) ? Colour.White : Colour.Black;
                 Evaluate();
             }
 
