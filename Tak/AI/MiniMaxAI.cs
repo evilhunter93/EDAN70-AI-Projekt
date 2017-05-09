@@ -124,7 +124,6 @@ namespace Tak.AI
         {
             internal GameBoard board;
             internal int score;
-            internal bool end;
             internal string move;
             internal List<string> moves;
             internal Colour turn;
