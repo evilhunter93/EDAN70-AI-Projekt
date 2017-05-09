@@ -33,7 +33,13 @@ namespace Tak.Game
         public Colour Turn { get { return turn; } set { turn = value; } }
         public GameState GameState { get { return state; } }
 
-        public StoneStack[,] Stacks
+        public StoneStack[,] StacksReference
+        {
+            get { return stacks; }
+            set { stacks = value; }
+        }
+
+        public StoneStack[,] StacksCopy
         {
             get
             {
@@ -69,7 +75,7 @@ namespace Tak.Game
         private GameBoard(GameBoard other)
         {
             size = other.size;
-            stacks = other.Stacks; // deep copy
+            stacks = other.StacksCopy; // deep copy
             state = other.state;
             turn = other.turn;
             whiteStones = other.whiteStones.Clone();
@@ -265,6 +271,7 @@ namespace Tak.Game
 
         private void RemoveInvalidMoves(ref List<string> validMoves)
         {
+            // TODO: Make faster version
             validMoves.RemoveAll(move =>
             {
                 GameBoard testBoard = Clone();

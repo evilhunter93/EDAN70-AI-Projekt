@@ -39,7 +39,7 @@ namespace Tak.GUI
         public void Draw()
         {
             string text = "";
-            StoneStack[,] stacks = gameBoard.Stacks;
+            StoneStack[,] stacks = gameBoard.StacksCopy;
             Stone s;
 
             for (int col = size - 1; col >= 0; col--)

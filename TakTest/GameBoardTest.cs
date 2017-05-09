@@ -33,7 +33,7 @@ namespace TakTests
             board1.PlaceStone(0, 0, new Flatstone(Colour.Black));
 
             GameBoard board2 = new GameBoard(5);
-            board2.Stacks = board1.Stacks;
+            board2.StacksCopy = board1.StacksCopy;
             board2.PlaceStone(0, 0, new Flatstone(Colour.Black));
         }
 
@@ -42,7 +42,7 @@ namespace TakTests
         {
             GameBoard board1 = new GameBoard(5);
             GameBoard board2 = new GameBoard(5);
-            board2.Stacks = board1.Stacks;
+            board2.StacksCopy = board1.StacksCopy;
             board2.PlaceStone(0, 0, new Flatstone(Colour.Black));
             board1.PlaceStone(0, 0, new Flatstone(Colour.Black));
         }
@@ -210,7 +210,7 @@ namespace TakTests
             board1.PlaceStone(3, 3, new Flatstone(Colour.White));
             board1.PlaceStone(4, 1, new Flatstone(Colour.Black));
             board1.PlaceStone(4, 4, new Flatstone(Colour.White));
-            board2.Stacks = board1.Stacks;
+            board2.StacksCopy = board1.StacksCopy;
 
             Assert.AreEqual(board1, board2);
         }
