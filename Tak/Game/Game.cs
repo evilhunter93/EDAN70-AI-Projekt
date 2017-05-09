@@ -33,19 +33,19 @@ namespace Tak.Game
             if (p1Type == "Human")
                 p1 = new HumanPlayer(Colour.White, interpreter);
             else
-                p1 = new AIPlayer(Colour.White, interpreter);
+                p1 = new AIPlayer(Colour.White, interpreter, board);
 
             if (p2Type == "Human")
                 p2 = new HumanPlayer(Colour.Black, interpreter);
             else
-                p2 = new AIPlayer(Colour.Black, interpreter);
+                p2 = new AIPlayer(Colour.Black, interpreter, board);
 
             currentPlayer = (p1.Colour == Colour.White) ? p1 : p2;
         }
 
         public void Run()
         {
-            stacks = board.Stacks;
+            stacks = board.StacksCopy;
             SetupRounds();
 
             board.Turn = Colour.White;
@@ -57,7 +57,7 @@ namespace Tak.Game
                 {
                     currentPlayer.DoMove();
                     board.EndTurn();
-                    stacks = board.Stacks;
+                    stacks = board.StacksCopy;
                     currentPlayer = (board.Turn == p1.Colour) ? p1 : p2;
                     gui.Draw();
                 }
@@ -93,7 +93,7 @@ namespace Tak.Game
                 {
                     currentPlayer.DoMove();
                     board.EndTurn();
-                    stacks = board.Stacks;
+                    stacks = board.StacksCopy;
                     currentPlayer = (board.Turn == p1.Colour) ? p2 : p1;
                     gui.Draw();
                     turns--;
@@ -141,7 +141,7 @@ namespace Tak.Game
 
         private void Rollback()
         {
-            board.Stacks = stacks;
+            board.StacksCopy = stacks;
         }
     }
 }
