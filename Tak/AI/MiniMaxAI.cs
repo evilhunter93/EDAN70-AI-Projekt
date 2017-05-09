@@ -11,191 +11,113 @@ namespace Tak.AI
     class MiniMaxAI : AI
     {
         Colour colour;
-        private GameBoard board;
+        private GameBoard board; // §readonly, rename to something fancy
         public MiniMaxAI(GameBoard board)
         {
             this.board = board;
             colour = board.Turn;
         }
+
         public string BestMove()
         {
-            string move = MinMax();
-            throw new NotImplementedException();
+            return BestMove(0);
         }
 
-        private string MinMax()
+        public string BestMove(int depth)
+        {
+            return MinMax(depth);
+        }
+
+        private string MinMax(int depth)
         {
             string bestMove = null;
             List<string> moves = new List<string>();
-            List<Node> nodes;
+            Queue<Node> nodes = new Queue<Node>();
 
             // Find all valid moves
             moves = board.ValidMoves(board.Turn);
-            nodes = new List<Node>();
 
             // For each valid move
             // Create a node
             foreach (string move in moves)
             {
-                nodes.Add(new Node(board.Clone(), move));
+                nodes.Enqueue(new Node(board.Clone(), move));
             }
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node node;
-            int temp;
-            int min = int.MaxValue;
+            int score;
+            int max = int.MinValue;
             while (nodes.Count > 0)
             {
-                node = (Node)nodes[0];
-                nodes.Remove(node);
-                temp = Min(node);
-                if (temp < min)
+                node = nodes.Dequeue();
+                score = Min(node, depth - 1);
+                if (score > max)
                 {
+                    max = score;
                     bestMove = node.move;
                 }
             }
             return bestMove;
         }
 
-        private int Min(Node node)
+        private int Min(Node node, int depth)
         {
-            List<string> moves;
-            List<Node> nodes;
-            GameBoard nBoard = node.board;
-            new Interpreter(nBoard).Input(node.move);
-            int nScore = EvaluationFunction(node);
-            GameState gs = nBoard.GameState;
-            if (gs != GameState.InProgress)
-            {
-                if (((gs == GameState.BF || gs == GameState.BR) && colour == Colour.Black) || ((gs == GameState.WF || gs == GameState.WR) && colour == Colour.White))
-                    return nScore += 100;
-                else if (gs == GameState.Tie)
-                    return nScore;
-                else
-                    return nScore -= 100;
-            }
-            // Find all valid moves
-            moves = nBoard.ValidMoves(nBoard.Turn);
-            nodes = new List<Node>();
+            if (depth <= 0)
+                return node.score;
+
+            Queue<Node> nodes = new Queue<Node>();
 
             // For each valid move
             // Create a node
-            NodeInsertion(moves, nodes, nBoard);
+            NodeInsertion(node, nodes);
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node newNode;
-            int temp;
+            int score;
             int min = int.MaxValue;
             while (nodes.Count > 0)
             {
-                newNode = (Node)nodes[0];
-                nodes.Remove(newNode);
-                temp = nScore + Max(newNode);
-                if (temp < min)
-                    min = temp;
+                newNode = nodes.Dequeue();
+                score = Max(newNode, depth - 1);
+                if (score < min)
+                    min = score;
             }
             return min;
         }
 
-        private int Max(Node node)
+        private int Max(Node node, int depth)
         {
-            List<string> moves;
-            List<Node> nodes;
-            GameBoard nBoard = node.board;
-            new Interpreter(nBoard).Input(node.move);
-            int nScore = EvaluationFunction(node);
-            GameState gs = nBoard.GameState;
-            if (gs != GameState.InProgress)
-            {
-                if (((gs == GameState.BF || gs == GameState.BR) && colour == Colour.Black) || ((gs == GameState.WF || gs == GameState.WR) && colour == Colour.White))
-                    return nScore += 100;
-                else if (gs == GameState.Tie)
-                    return nScore;
-                else
-                    return nScore -= 100;
-            }
+            if (depth <= 0)
+                return node.score;
 
-            // Find all valid moves
-            moves = nBoard.ValidMoves(nBoard.Turn);
-            nodes = new List<Node>();
+            Queue<Node> nodes = new Queue<Node>();
 
             // For each valid move
             // Create a node
-            NodeInsertion(moves, nodes, nBoard);
+            NodeInsertion(node, nodes);
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node newNode;
-            int temp;
+            int score;
             int max = int.MinValue;
             while (nodes.Count > 0)
             {
-                newNode = (Node)nodes[0];
-                nodes.Remove(newNode);
-                temp = nScore + Min(newNode);
-                if (temp > max)
-                    max = temp;
+                newNode = nodes.Dequeue();
+                score = Min(newNode, depth - 1);
+                if (score > max)
+                    max = score;
             }
             return max;
         }
 
-        private static void NodeInsertion(List<string> moves, List<Node> nodes, GameBoard nBoard)
+        private static void NodeInsertion(Node node, Queue<Node> nodes)
         {
-            foreach (string move in moves)
+            foreach (string move in node.moves)
             {
-                GameBoard newBoard = nBoard.Clone();
-                newBoard.EndTurn();
-                nodes.Add(new Node(newBoard, move));
+                GameBoard newBoard = node.board.Clone();
+                nodes.Enqueue(new Node(newBoard, move));
             }
-        }
-
-        private int EvaluationFunction(Node node)
-        {
-            int score = node.score;
-            score += EvaluateStack(node.board);
-            score += EvaluateTopPiece(node.board);
-            return score;
-        }
-
-        private int EvaluateStack(GameBoard board)
-        {
-            int score = 0;
-            StoneStack[,] stacks = board.Stacks;
-            foreach (StoneStack stack in stacks)
-            {
-                if (stack.Count > 0)
-                {
-                    if (stack.Owner == colour)
-                    {
-                        score += stack.Count;
-                    }
-                    else
-                    {
-                        score -= stack.Count;
-                    }
-                }
-            }
-            return score;
-        }
-
-        private int EvaluateTopPiece(GameBoard board)
-        {
-            int score = 0;
-            StoneStack[,] stacks = board.Stacks;
-            foreach (StoneStack stack in stacks)
-            {
-                if (stack.Count > 0)
-                {
-                    if (stack.Owner == colour)
-                    {
-                        score += 1;
-                    }
-                    else
-                    {
-                        score -= 1;
-                    }
-                }
-            }
-            return score;
         }
 
         class Node
@@ -204,14 +126,34 @@ namespace Tak.AI
             internal int score;
             internal bool end;
             internal string move;
+            internal List<string> moves;
+            internal Colour turn;
 
-            internal Node(GameBoard board, string move)
+            internal Node(GameBoard nBoard, string nMove)
             {
-                this.board = board;
-                this.move = move;
+                board = nBoard;
+                move = nMove;
+                new Interpreter(board).Input(move);
+                moves = board.ValidMoves(board.Turn);
+                turn = (board.Turn == Colour.Black) ? Colour.White : Colour.Black;
+                Evaluate();
             }
 
-
+            private void Evaluate()
+            {
+                score = 0;
+                score += Evaluator.EvaluateStack(board, turn);
+                score += Evaluator.EvaluateTopPiece(board, turn);
+                GameState gs = board.GameState;
+                if (gs != GameState.InProgress && gs != GameState.Tie)
+                {
+                    if (((gs == GameState.BF || gs == GameState.BR) && turn == Colour.Black) ||
+                        ((gs == GameState.WF || gs == GameState.WR) && turn == Colour.White))
+                        score = int.MaxValue;
+                    else
+                        score = int.MinValue;
+                }
+            }
         }
     }
 }
