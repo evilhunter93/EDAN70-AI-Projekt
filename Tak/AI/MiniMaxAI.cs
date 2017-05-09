@@ -26,7 +26,7 @@ namespace Tak.AI
         private string MinMax()
         {
             string bestMove = null;
-            List<String> moves = new List<String>();
+            List<string> moves = new List<string>();
             List<Node> nodes;
 
             // Find all valid moves
@@ -59,7 +59,7 @@ namespace Tak.AI
 
         private int Min(Node node)
         {
-            List<String> moves;
+            List<string> moves;
             List<Node> nodes;
             GameBoard nBoard = node.board;
             new Interpreter(nBoard).Input(node.move);
@@ -99,7 +99,7 @@ namespace Tak.AI
 
         private int Max(Node node)
         {
-            List<String> moves;
+            List<string> moves;
             List<Node> nodes;
             GameBoard nBoard = node.board;
             new Interpreter(nBoard).Input(node.move);
