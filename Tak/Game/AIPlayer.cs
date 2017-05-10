@@ -9,10 +9,10 @@ namespace Tak.Game
 {
     class AIPlayer : Player
     {
-        MiniMaxAI ai;
-        public AIPlayer(Colour c, Interpreter i, GameBoard board) : base(c, i)
+        private IAI ai;
+        public AIPlayer(Colour c, Interpreter i, IAI ai) : base(c, i)
         {
-            ai = new MiniMaxAI(board);
+            this.ai = ai;
         }
 
         public override void DoMove()

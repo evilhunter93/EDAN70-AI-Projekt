@@ -11,7 +11,8 @@ namespace Tak
     {
         static void Main(string[] args)
         {
-            TakGame game = new TakGame(5, "Human", "AI");
+            // Players: Human, MiniMaxAI, LearningAI
+            TakGame game = new TakGame(5, "Human", "MiniMaxAI", 2);
             game.Run();
 
             Console.Write("\nPress Enter to exit...");

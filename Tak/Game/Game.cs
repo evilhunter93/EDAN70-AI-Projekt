@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tak.AI;
 using Tak.Exceptions;
 using Tak.Game;
 using Tak.GUI;
@@ -12,6 +13,7 @@ namespace Tak.Game
     public class TakGame
     {
         GameBoard board;
+        Interpreter interpreter;
         StoneStack[,] stacks;
         Player p1;
         Player p2;
@@ -19,28 +21,37 @@ namespace Tak.Game
         string winCond;
         ASCIIGUI gui;
 
-        public TakGame(int size, string p1Type, string p2Type)
-        {
-            Initialize(size, p1Type, p2Type);
-        }
-
-        public void Initialize(int size, string p1Type, string p2Type)
+        public TakGame(int size, string p1Type, string p2Type, int depth = 0)
         {
             board = new GameBoard(size);
-            Interpreter interpreter = new Interpreter(board);
+            interpreter = new Interpreter(board);
             gui = new ASCIIGUI(board, size);
 
-            if (p1Type == "Human")
-                p1 = new HumanPlayer(Colour.White, interpreter);
-            else
-                p1 = new AIPlayer(Colour.White, interpreter, board);
-
-            if (p2Type == "Human")
-                p2 = new HumanPlayer(Colour.Black, interpreter);
-            else
-                p2 = new AIPlayer(Colour.Black, interpreter, board);
-
+            p1 = CreatePlayer(p1Type, Colour.White, depth);
+            p2 = CreatePlayer(p2Type, Colour.Black, depth);
             currentPlayer = (p1.Colour == Colour.White) ? p1 : p2;
+        }
+
+        private Player CreatePlayer(string playerType, Colour colour, int depth = 0)
+        {
+            switch (playerType.ToLower())
+            {
+                case "human":
+                    return new HumanPlayer(Colour.White, interpreter);
+
+                case "minimaxai":
+                case "minmaxai":
+                case "minimax":
+                case "minmax":
+                    IAI ai = new MiniMaxAI(board, depth);
+                    return new AIPlayer(colour, interpreter, ai);
+
+                case "learningai":
+                    throw new NotImplementedException();
+
+                default:
+                    throw new TakException("Player not recognised.");
+            }
         }
 
         public void Run()
