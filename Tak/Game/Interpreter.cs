@@ -19,9 +19,10 @@ namespace Tak.Game
 
             if (input.ToLower() == "valid")
             {
-                List<string> validMoves = board.ValidMoves(board.Turn);
+                IEnumerable<string> validMoves = board.ValidMoves(board.Turn);
                 //Console.WriteLine(validMoves);
-                validMoves.ForEach(move => Console.Write("{0} ", move));
+                foreach (string move in validMoves)
+                    Console.Write("{0} ", move);
                 throw new TakException("\nPrinting valid moves.");
             }
 

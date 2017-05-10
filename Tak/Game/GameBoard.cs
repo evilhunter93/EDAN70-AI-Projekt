@@ -185,7 +185,7 @@ namespace Tak.Game
             return true;
         }
 
-        public List<string> ValidMoves(Colour player, bool setup = false)
+        public IEnumerable<string> ValidMoves(Colour player, bool setup = false)
         {
             List<string> validMoves = new List<string>();
             StoneReserve stones;
@@ -260,48 +260,32 @@ namespace Tak.Game
                                         if (!ValidIndex(i + iStep * dist, j + jStep * dist))
                                             break;
 
-                                        PutDownR(nbrPickUp, dist, move + direction, ref validMoves, singleMove);
+                                        PutDownR(nbrPickUp, dist, move + direction, validMoves, singleMove);
                                     }
                                 }
                             }
                         }
                     }
                 }
-            RemoveInvalidMoves(ref validMoves);
-            return validMoves;
-        }
-
-        private void RemoveInvalidMoves(ref List<string> validMoves)
-        {
-            // TODO: Make faster version
-            validMoves.RemoveAll(move =>
+            foreach (string m in validMoves)
             {
                 GameBoard testBoard = Clone();
-                try
-                {
-                    Interpreter.Input(move, testBoard);
-                    return false;
-                }
-                catch (IllegalMoveException)
-                {
-                    return true;
-                }
+                try { Interpreter.Input(m, testBoard); }
+                catch (IllegalMoveException) { continue; }
                 catch (IllegalInputException e)
                 {
-                    Console.Write("\nInvalid move: " + move + "\n");
+                    Console.Write("\nInvalid input: " + m + "\n");
                     throw e;
                 }
-            });
+                yield return m;
+            }
         }
 
-        private void PutDownR(int pickUp, int dist, string move, ref List<string> moves, bool singleMove = false)
+        private void PutDownR(int pickUp, int dist, string move, List<string> moves, bool singleMove = false)
         {
             //TODO: Stop search if blocking stone found
             if (dist < 1)
                 throw new TakException("Error in PutDownR(): dist < 1");
-
-
-
             if (dist == 1)
             {
                 if (!singleMove)
@@ -311,7 +295,7 @@ namespace Tak.Game
             }
             else
                 for (int i = 1; i <= pickUp - dist + 1; i++)
-                    PutDownR(pickUp - i, dist - 1, move + i, ref moves);
+                    PutDownR(pickUp - i, dist - 1, move + i, moves);
         }
 
         private string CoordsToString(int i, int j)

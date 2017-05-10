@@ -29,10 +29,7 @@ namespace Tak.AI
         private string MinMax(int depth, int alpha = int.MinValue, int beta = int.MaxValue)
         {
             string bestMove = null;
-            List<string> moves = new List<string>();
-
-            // Find all valid moves
-            moves = board.ValidMoves(board.Turn);
+            IEnumerable<string> moves = board.ValidMoves(board.Turn);
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node node;
@@ -95,7 +92,7 @@ namespace Tak.AI
             internal GameBoard board;
             internal int score;
             internal string move;
-            internal List<string> moves;
+            internal IEnumerable<string> moves;
             internal Colour turn;
 
             internal Node(GameBoard nBoard, string nMove)
