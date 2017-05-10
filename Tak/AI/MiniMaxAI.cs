@@ -26,7 +26,7 @@ namespace Tak.AI
             return MinMax(depth);
         }
 
-        private string MinMax(int depth)
+        private string MinMax(int depth, int alpha = int.MinValue, int beta = int.MaxValue)
         {
             string bestMove = null;
             List<string> moves = new List<string>();
@@ -45,21 +45,22 @@ namespace Tak.AI
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node node;
             int score;
-            int max = int.MinValue;
             while (nodes.Count > 0)
             {
                 node = nodes.Dequeue();
-                score = Min(node, depth - 1);
-                if (score > max)
+                score = Min(node, depth - 1, alpha, beta);
+                if (score > alpha)
                 {
-                    max = score;
+                    alpha = score;
                     bestMove = node.move;
                 }
+                if (beta <= alpha)
+                    break; // beta cut-off
             }
             return bestMove;
         }
 
-        private int Min(Node node, int depth)
+        private int Min(Node node, int depth, int alpha, int beta)
         {
             if (depth <= 0)
                 return node.score;
@@ -72,19 +73,19 @@ namespace Tak.AI
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node newNode;
-            int score;
-            int min = int.MaxValue;
+            int score = int.MaxValue;
             while (nodes.Count > 0)
             {
                 newNode = nodes.Dequeue();
-                score = Max(newNode, depth - 1);
-                if (score < min)
-                    min = score;
+                score = Math.Min(score, Max(newNode, depth - 1, alpha, beta));
+                beta = Math.Min(beta, score);
+                if (beta <= alpha)
+                    break; // alpha cut-off
             }
-            return min;
+            return score;
         }
 
-        private int Max(Node node, int depth)
+        private int Max(Node node, int depth, int alpha, int beta)
         {
             if (depth <= 0)
                 return node.score;
@@ -97,16 +98,16 @@ namespace Tak.AI
 
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node newNode;
-            int score;
-            int max = int.MinValue;
+            int score = int.MinValue;
             while (nodes.Count > 0)
             {
                 newNode = nodes.Dequeue();
-                score = Min(newNode, depth - 1);
-                if (score > max)
-                    max = score;
+                score = Math.Max(score, Min(newNode, depth - 1, alpha, beta));
+                alpha = Math.Max(alpha, score);
+                if (beta <= alpha)
+                    break; // beta cut-off
             }
-            return max;
+            return score;
         }
 
         private static void NodeInsertion(Node node, Queue<Node> nodes)
