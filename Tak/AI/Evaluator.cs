@@ -35,20 +35,32 @@ namespace Tak.AI
             int score = 0;
             StoneStack[,] stacks = board.StacksReference;
             foreach (StoneStack stack in stacks)
-            {
                 if (stack.Count > 0)
-                {
                     if (stack.Owner == turn)
-                    {
-                        score += 1;
-                    }
+                        if (stack.Top.Road)
+                            if (stack.Top is Flatstone)
+                                score += 3;
+                            else
+                                score += 1;
+                        else
+                            score += 2;
                     else
-                    {
                         score -= 1;
-                    }
-                }
-            }
             return score;
+        }
+
+        public static int EvaluateGameState(GameBoard board, Colour turn)
+        {
+            GameState gs = board.GameState;
+            if (gs != GameState.InProgress && gs != GameState.Tie)
+            {
+                if (((gs == GameState.BF || gs == GameState.BR) && turn == Colour.Black) ||
+                    ((gs == GameState.WF || gs == GameState.WR) && turn == Colour.White))
+                    return int.MaxValue;
+                else
+                    return int.MinValue;
+            }
+            return 0;
         }
     }
 }

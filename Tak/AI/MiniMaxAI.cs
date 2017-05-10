@@ -8,22 +8,20 @@ using Tak.Game;
 
 namespace Tak.AI
 {
-    class MiniMaxAI : AI
+    class MiniMaxAI : IAI
     {
         Colour colour;
         private GameBoard board; // §readonly, rename to something fancy
-        public MiniMaxAI(GameBoard board)
+        private int depth;
+
+        public MiniMaxAI(GameBoard board, int depth = 0)
         {
             this.board = board;
+            this.depth = depth;
             colour = board.Turn;
         }
 
         public string BestMove()
-        {
-            return BestMove(0);
-        }
-
-        public string BestMove(int depth)
         {
             return MinMax(depth);
         }
@@ -141,17 +139,11 @@ namespace Tak.AI
 
             private void Evaluate()
             {
-                score = 0;
-                score += Evaluator.EvaluateStack(board, turn);
-                score += Evaluator.EvaluateTopPiece(board, turn);
-                GameState gs = board.GameState;
-                if (gs != GameState.InProgress && gs != GameState.Tie)
+                score = Evaluator.EvaluateGameState(board, turn);
+                if (score == 0)
                 {
-                    if (((gs == GameState.BF || gs == GameState.BR) && turn == Colour.Black) ||
-                        ((gs == GameState.WF || gs == GameState.WR) && turn == Colour.White))
-                        score = int.MaxValue;
-                    else
-                        score = int.MinValue;
+                    score += Evaluator.EvaluateStack(board, turn);
+                    score += Evaluator.EvaluateTopPiece(board, turn);
                 }
             }
         }
