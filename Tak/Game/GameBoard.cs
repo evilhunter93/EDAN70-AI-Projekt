@@ -185,7 +185,7 @@ namespace Tak.Game
             return true;
         }
 
-        public List<string> ValidMoves(Colour player)
+        public List<string> ValidMoves(Colour player, bool setup = false)
         {
             List<string> validMoves = new List<string>();
             StoneReserve stones;
@@ -205,15 +205,17 @@ namespace Tak.Game
                         if (stones.CheckReserve(new Flatstone(player)))
                         {
                             validMoves.Add(coords);
-                            validMoves.Add("S" + coords);
+                            if (!setup)
+                                validMoves.Add("S" + coords);
                         }
 
                         if (stones.CheckReserve(new Capstone(player)))
-                            validMoves.Add("C" + coords);
+                            if (!setup)
+                                validMoves.Add("C" + coords);
                     }
                     else
                     {
-                        if (player == stacks[i, j].Owner)
+                        if (player == stacks[i, j].Owner && !setup)
                         {
                             for (int nbrPickUp = 1; nbrPickUp <= size; nbrPickUp++)
                             {
