@@ -18,6 +18,7 @@ namespace Tak.Game
         Player p2;
         Player currentPlayer;
         string winCond;
+        string prevMove;
         ASCIIGUI gui;
 
         public TakGame(int size, string p1Type, string p2Type, int depth = 0)
@@ -58,17 +59,16 @@ namespace Tak.Game
             SetupRounds();
 
             board.Turn = Colour.White;
-            gui.Draw();
 
             while (board.GameState == GameState.InProgress)
             {
                 try
                 {
-                    currentPlayer.DoMove();
+                    prevMove = currentPlayer.DoMove();
                     board.EndTurn();
                     stacks = board.StacksCopy;
                     currentPlayer = (board.Turn == p1.Colour) ? p1 : p2;
-                    gui.Draw();
+                    gui.Draw((currentPlayer is HumanPlayer) ? "Previous move: " + prevMove : "AI thinking...");
                 }
                 catch (IllegalInputException e)
                 {
@@ -85,7 +85,7 @@ namespace Tak.Game
                     Console.WriteLine(e.Message + "\nPlease choose a new move to perform");
                 }
             }
-
+            gui.Draw();
             gui.Write(GameOverText());
         }
 
@@ -93,18 +93,18 @@ namespace Tak.Game
         {
             board.Turn = Colour.Black;
             int turns = 2;
-            currentPlayer = (board.Turn == p1.Colour) ? p2 : p1;
             gui.Draw();
+            currentPlayer = (board.Turn == p1.Colour) ? p2 : p1;
 
             while (board.GameState == GameState.InProgress && turns > 0)
             {
                 try
                 {
-                    currentPlayer.DoMove();
+                    prevMove = currentPlayer.DoMove();
                     board.EndTurn();
                     stacks = board.StacksCopy;
                     currentPlayer = (board.Turn == p1.Colour) ? p2 : p1;
-                    gui.Draw();
+                    gui.Draw((currentPlayer is HumanPlayer) ? "Previous move: " + prevMove : "AI thinking...");
                     turns--;
                 }
                 catch (IllegalInputException e)
