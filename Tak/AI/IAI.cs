@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tak.AI
 {
-    public interface AI
+    public interface IAI
     {
         string BestMove();
     }
