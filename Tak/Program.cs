@@ -12,7 +12,7 @@ namespace Tak
         static void Main(string[] args)
         {
             // Players: Human, MiniMaxAI, LearningAI
-            TakGame game = new TakGame(5, "Human", "MiniMaxAI", 2);
+            TakGame game = new TakGame(5, "Human", "MiniMaxAI", 1);
             game.Run();
 
             Console.Write("\nPress Enter to exit...");
