@@ -15,12 +15,11 @@ namespace Tak.Game
             this.ai = ai;
         }
 
-        public override void DoMove()
+        public override string DoMove()
         {
             string move = ai.BestMove();
             Interpreter.Input(move, board);
-            Console.Write("\nAI did move: " + move);
-            Task.Delay(2000).Wait();
+            return move;
         }
     }
 }

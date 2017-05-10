@@ -26,6 +26,6 @@ namespace Tak.Game
             colourText = (colour == Colour.White) ? "White" : "Black";
         }
 
-        public abstract void DoMove();
+        public abstract string DoMove();
     }
 }
