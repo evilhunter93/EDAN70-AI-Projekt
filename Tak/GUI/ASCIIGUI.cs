@@ -36,9 +36,9 @@ namespace Tak.GUI
         /// <summary>
         /// Witchcraft. Don't touch please.
         /// </summary>
-        public void Draw()
+        public void Draw(string message = null)
         {
-            string text = "";
+            string boardText = "";
             StoneStack[,] stacks = gameBoard.StacksCopy;
             Stone s;
 
@@ -53,34 +53,35 @@ namespace Tak.GUI
                             if (stacks[row, col].Count > 0)
                             {
                                 s = stacks[row, col].PopStone();
-                                text += StoneSymbol(s);
+                                boardText += StoneSymbol(s);
                                 if (squareRow == SQUARE_SIZE - 1 && squareCol == 0 && stacks[row, col].Count > 0)
-                                    text += "+";
+                                    boardText += "+";
                                 else
-                                    text += " ";
+                                    boardText += " ";
                             }
                             else
                             {
-                                text += blank + " ";
+                                boardText += blank + " ";
                             }
                         }
                         if (row < size - 1)
-                            text += colSeparator + " ";
+                            boardText += colSeparator + " ";
                     }
-                    text += "\n";
+                    boardText += "\n";
                 }
                 if (col > 0)
-                    text += rowSeparator;
-                text += "\n";
+                    boardText += rowSeparator;
+                boardText += "\n";
             }
 
             Console.Clear();
-            Console.WriteLine(text);
+            Console.WriteLine(boardText);
+            Console.WriteLine("\n" + message);
         }
 
-        public void Write(string gameOverText)
+        public void Write(string message)
         {
-            Console.WriteLine(gameOverText);
+            Console.WriteLine(message);
         }
 
         private string StoneSymbol(Stone s)
