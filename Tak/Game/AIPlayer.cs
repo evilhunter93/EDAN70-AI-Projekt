@@ -10,7 +10,7 @@ namespace Tak.Game
     class AIPlayer : Player
     {
         private IAI ai;
-        public AIPlayer(Colour c, Interpreter i, IAI ai) : base(c, i)
+        public AIPlayer(GameBoard b, Colour c, IAI ai) : base(b, c)
         {
             this.ai = ai;
         }
@@ -18,7 +18,7 @@ namespace Tak.Game
         public override void DoMove()
         {
             string move = ai.BestMove();
-            interpreter.Input(move);
+            Interpreter.Input(move, board);
             Console.Write("\nAI did move: " + move);
             Task.Delay(2000).Wait();
         }

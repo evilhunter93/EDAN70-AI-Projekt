@@ -13,7 +13,6 @@ namespace Tak.Game
     public class TakGame
     {
         GameBoard board;
-        Interpreter interpreter;
         StoneStack[,] stacks;
         Player p1;
         Player p2;
@@ -24,7 +23,6 @@ namespace Tak.Game
         public TakGame(int size, string p1Type, string p2Type, int depth = 0)
         {
             board = new GameBoard(size);
-            interpreter = new Interpreter(board);
             gui = new ASCIIGUI(board, size);
 
             p1 = CreatePlayer(p1Type, Colour.White, depth);
@@ -37,14 +35,14 @@ namespace Tak.Game
             switch (playerType.ToLower())
             {
                 case "human":
-                    return new HumanPlayer(Colour.White, interpreter);
+                    return new HumanPlayer(board, Colour.White);
 
                 case "minimaxai":
                 case "minmaxai":
                 case "minimax":
                 case "minmax":
                     IAI ai = new MiniMaxAI(board, depth);
-                    return new AIPlayer(colour, interpreter, ai);
+                    return new AIPlayer(board, colour, ai);
 
                 case "learningai":
                     throw new NotImplementedException();

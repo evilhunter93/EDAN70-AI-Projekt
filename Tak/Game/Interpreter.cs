@@ -10,22 +10,16 @@ namespace Tak.Game
 {
     public class Interpreter
     {
-        private GameBoard boardModel;
         delegate char IncrementCharCount(int n = 1);
 
-        public Interpreter(GameBoard boardModel)
-        {
-            this.boardModel = boardModel;
-        }
-
-        public void Input(string input)
+        public static void Input(string input, GameBoard board)
         {
             if (input.ToLower() == "exit")
                 Environment.Exit(0);
 
             if (input.ToLower() == "valid")
             {
-                List<string> validMoves = boardModel.ValidMoves(boardModel.Turn);
+                List<string> validMoves = board.ValidMoves(board.Turn);
                 //Console.WriteLine(validMoves);
                 validMoves.ForEach(move => Console.Write("{0} ", move));
                 throw new TakException("\nPrinting valid moves.");
@@ -55,15 +49,15 @@ namespace Tak.Game
             {
                 case 'S':
                     charCount++;
-                    stoneType = new Flatstone(boardModel.Turn);
+                    stoneType = new Flatstone(board.Turn);
                     stoneType.Standing = true;
                     break;
                 case 'C':
                     charCount++;
-                    stoneType = new Capstone(boardModel.Turn);
+                    stoneType = new Capstone(board.Turn);
                     break;
                 default:
-                    stoneType = new Flatstone(boardModel.Turn);
+                    stoneType = new Flatstone(board.Turn);
                     break;
             }
             ch = input[charCount];
@@ -123,12 +117,12 @@ namespace Tak.Game
                     {
                         throw new IllegalInputException("Amount specified does not correlate with amount put down");
                     }
-                    stack = boardModel.PickUpStack(x, y, amount);
+                    stack = board.PickUpStack(x, y, amount);
                 }
                 else
                 {
                     move[0] = 1;
-                    stack = boardModel.PickUpStack(x, y);
+                    stack = board.PickUpStack(x, y);
                 }
                 if (ml)
                 {
@@ -137,7 +131,7 @@ namespace Tak.Game
                         x--;
                         for (int j = 0; j < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, stack.PopStone(), true);
+                            board.PlaceStone(x, y, stack.PopStone(), true);
                         }
                     }
                 }
@@ -148,7 +142,7 @@ namespace Tak.Game
                         x++;
                         for (int j = 0; j < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, stack.PopStone(), true);
+                            board.PlaceStone(x, y, stack.PopStone(), true);
                         }
                     }
                 }
@@ -159,7 +153,7 @@ namespace Tak.Game
                         y++;
                         for (int j = 0; j < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, stack.PopStone(), true);
+                            board.PlaceStone(x, y, stack.PopStone(), true);
                         }
                     }
                 }
@@ -170,7 +164,7 @@ namespace Tak.Game
                         y--;
                         for (int j = 0; j < n; j++)
                         {
-                            boardModel.PlaceStone(x, y, stack.PopStone(), true);
+                            board.PlaceStone(x, y, stack.PopStone(), true);
                         }
                     }
                 }
@@ -182,7 +176,7 @@ namespace Tak.Game
                     //exception
                     throw new IllegalInputException("Illegal input format for placing new stones");
                 }
-                boardModel.PlaceStone(x, y, stoneType);
+                board.PlaceStone(x, y, stoneType);
             }
         }
     }

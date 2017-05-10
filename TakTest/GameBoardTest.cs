@@ -132,8 +132,7 @@ namespace TakTests
             int size = 5;
             GameBoard board = new GameBoard(size);
             board.Turn = Colour.Black;
-            Interpreter parser = new Interpreter(board);
-            parser.Input("a1");
+            Interpreter.Input("a1", board);
             board.PlaceStone(0, 0, new Flatstone(Colour.Black));
         }
 

@@ -8,7 +8,7 @@ namespace Tak.Game
 {
     class HumanPlayer : Player
     {
-        public HumanPlayer(Colour c, Interpreter i) : base(c, i) { }
+        public HumanPlayer(GameBoard b, Colour c) : base(b, c) { }
 
         public override void DoMove()
         {
@@ -17,7 +17,7 @@ namespace Tak.Game
             {
                 move = PromptInput();
             } while (move.Count() == 0);
-            interpreter.Input(move);
+            Interpreter.Input(move, board);
         }
 
         private string PromptInput()

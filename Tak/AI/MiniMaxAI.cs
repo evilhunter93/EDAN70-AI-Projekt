@@ -130,7 +130,7 @@ namespace Tak.AI
             {
                 board = nBoard;
                 move = nMove;
-                new Interpreter(board).Input(move);
+                Interpreter.Input(move, board);
                 turn = board.Turn;
                 board.EndTurn();
                 moves = board.ValidMoves(board.Turn);

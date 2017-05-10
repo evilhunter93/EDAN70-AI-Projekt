@@ -275,10 +275,9 @@ namespace Tak.Game
             validMoves.RemoveAll(move =>
             {
                 GameBoard testBoard = Clone();
-                Interpreter interp = new Interpreter(testBoard);
                 try
                 {
-                    interp.Input(move);
+                    Interpreter.Input(move, testBoard);
                     return false;
                 }
                 catch (IllegalMoveException)
