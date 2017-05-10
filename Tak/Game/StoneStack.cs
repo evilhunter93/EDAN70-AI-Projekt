@@ -10,6 +10,13 @@ namespace Tak.Game
     public class StoneStack : IEquatable<StoneStack>
     {
         private Stack<Stone> stones;
+        private bool test;
+
+        public bool Test
+        {
+            get { return test; }
+            set { test = value; }
+        }
 
         public Colour Owner { get { return stones.Peek().Colour; } }
 
@@ -20,13 +27,14 @@ namespace Tak.Game
         public StoneStack()
         {
             stones = new Stack<Stone>();
+            test = false;
         }
 
         public void NewStone(Stone stone)
         {
             if (Count > 0)
                 throw new IllegalMoveException("\nCan not place new stone on an occupied space.");
-            else
+            else if (!test)
                 stones.Push(stone);
         }
 
@@ -44,11 +52,12 @@ namespace Tak.Game
                         if (Top.Standing)
                             throw new IllegalMoveException("\nCan not place non-capstone on standingstone.");
                     }
-                    else
+                    else if (!test)
                         stones.Peek().Standing = false;
                 }
             }
-            stones.Push(stone);
+            if (!test)
+                stones.Push(stone);
         }
 
         public Stone PopStone()
@@ -68,10 +77,14 @@ namespace Tak.Game
                 throw new IllegalMoveException("\nCould not pick up " + nbr + " stones, stack contains " + Count);
 
             StoneStack temp = new StoneStack();
-            for (int i = 0; i < nbr; i++)
-            {
-                temp.AddStone(stones.Pop(), true);
-            }
+            if (!test)
+                for (int i = 0; i < nbr; i++)
+                {
+                    temp.AddStone(stones.Pop(), true);
+                }
+            else
+                foreach (Stone s in stones.Take(nbr))
+                    temp.AddStone(s, true);
             return temp;
         }
 

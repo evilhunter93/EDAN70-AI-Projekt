@@ -29,6 +29,7 @@ namespace Tak.Game
         private GameState state;
         private StoneReserve whiteStones;
         private StoneReserve blackStones;
+        private bool test;
 
         public Colour Turn { get { return turn; } set { turn = value; } }
         public GameState GameState { get { return state; } }
@@ -56,6 +57,17 @@ namespace Tak.Game
             set { stacks = value; }
         }
 
+        public bool Test
+        {
+            get { return test; }
+            set
+            {
+                test = value;
+                foreach (StoneStack ss in stacks)
+                    ss.Test = value;
+            }
+        }
+
         public GameBoard(int size)
         {
             if (size < 3 || size > 8)
@@ -80,6 +92,7 @@ namespace Tak.Game
             turn = other.turn;
             whiteStones = other.whiteStones.Clone();
             blackStones = other.blackStones.Clone();
+            Test = false;
         }
 
         public GameBoard Clone()
@@ -102,7 +115,8 @@ namespace Tak.Game
                         throw new IllegalMoveException("No more " + (stone is Capstone ? "capstones" : "flatstones") + " in the reserve.");
 
                     stacks[x, y].NewStone(stone);
-                    whiteStones.Decrement(stone);
+                    if (!test)
+                        whiteStones.Decrement(stone);
                 }
                 else if (stone.Colour == Colour.Black)
                 {
@@ -110,7 +124,8 @@ namespace Tak.Game
                         throw new IllegalMoveException("No more " + (stone is Capstone ? "capstones" : "flatstones") + " in the reserve.");
 
                     stacks[x, y].NewStone(stone);
-                    blackStones.Decrement(stone);
+                    if (!test)
+                        blackStones.Decrement(stone);
                 }
                 else
                 {
@@ -149,7 +164,6 @@ namespace Tak.Game
             turn = (turn == Colour.Black) ? Colour.White : Colour.Black;
             return turn;
         }
-
 
         public override bool Equals(Object obj)
         {
@@ -271,9 +285,10 @@ namespace Tak.Game
 
         public IEnumerable<string> ValidMoves(Colour player, bool setup = false)
         {
+            Test = true;
             foreach (string m in Moves(player, setup))
             {
-                try { Interpreter.Input(m, Clone()); }
+                try { Interpreter.Input(m, this); }
                 catch (IllegalMoveException) { continue; }
                 catch (IllegalInputException e)
                 {
@@ -282,6 +297,7 @@ namespace Tak.Game
                 }
                 yield return m;
             }
+            Test = false;
         }
 
         private IEnumerable<string> PutDownR(int pickUp, int dist, string move, bool singleMove = false)
