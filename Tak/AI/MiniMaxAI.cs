@@ -30,32 +30,24 @@ namespace Tak.AI
         {
             string bestMove = null;
             List<string> moves = new List<string>();
-            Queue<Node> nodes = new Queue<Node>();
 
             // Find all valid moves
             moves = board.ValidMoves(board.Turn);
 
-            // For each valid move
-            // Create a node
-            foreach (string move in moves)
-            {
-                nodes.Enqueue(new Node(board.Clone(), move));
-            }
-
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node node;
             int score;
-            while (nodes.Count > 0)
+            foreach (string move in moves)
             {
-                node = nodes.Dequeue();
+                node = new Node(board.Clone(), move);
                 score = Min(node, depth - 1, alpha, beta);
                 if (score > alpha)
                 {
                     alpha = score;
                     bestMove = node.move;
                 }
-                if (beta <= alpha)
-                    break; // beta cut-off
+                if (score >= beta)
+                    return bestMove;
             }
             return bestMove;
         }
@@ -65,22 +57,16 @@ namespace Tak.AI
             if (depth <= 0)
                 return node.score;
 
-            Queue<Node> nodes = new Queue<Node>();
-
-            // For each valid move
-            // Create a node
-            NodeInsertion(node, nodes);
-
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node newNode;
             int score = int.MaxValue;
-            while (nodes.Count > 0)
+            foreach (string move in node.moves)
             {
-                newNode = nodes.Dequeue();
+                newNode = new Node(node.board.Clone(), move);
                 score = Math.Min(score, Max(newNode, depth - 1, alpha, beta));
+                if (score <= alpha)
+                    return score;
                 beta = Math.Min(beta, score);
-                if (beta <= alpha)
-                    break; // alpha cut-off
             }
             return score;
         }
@@ -90,33 +76,18 @@ namespace Tak.AI
             if (depth <= 0)
                 return node.score;
 
-            Queue<Node> nodes = new Queue<Node>();
-
-            // For each valid move
-            // Create a node
-            NodeInsertion(node, nodes);
-
             // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
             Node newNode;
             int score = int.MinValue;
-            while (nodes.Count > 0)
-            {
-                newNode = nodes.Dequeue();
-                score = Math.Max(score, Min(newNode, depth - 1, alpha, beta));
-                alpha = Math.Max(alpha, score);
-                if (beta <= alpha)
-                    break; // beta cut-off
-            }
-            return score;
-        }
-
-        private static void NodeInsertion(Node node, Queue<Node> nodes)
-        {
             foreach (string move in node.moves)
             {
-                GameBoard newBoard = node.board.Clone();
-                nodes.Enqueue(new Node(newBoard, move));
+                newNode = new Node(node.board.Clone(), move);
+                score = Math.Max(score, Min(newNode, depth - 1, alpha, beta));
+                if (score >= beta)
+                    return score;
+                alpha = Math.Max(alpha, score);
             }
+            return score;
         }
 
         class Node
