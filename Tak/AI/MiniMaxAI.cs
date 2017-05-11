@@ -10,7 +10,6 @@ namespace Tak.AI
 {
     class MiniMaxAI : IAI
     {
-        Colour colour;
         private GameBoard board; // §readonly, rename to something fancy
         private int depth;
 
@@ -18,7 +17,6 @@ namespace Tak.AI
         {
             this.board = board;
             this.depth = depth;
-            colour = board.Turn;
         }
 
         public string BestMove()
