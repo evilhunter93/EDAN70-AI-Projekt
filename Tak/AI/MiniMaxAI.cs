@@ -29,7 +29,7 @@ namespace Tak.AI
             string bestMove = null;
             IEnumerable<string> moves = board.ValidMoves(board.Turn);
 
-            // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
+            // Recursively find the best move by using the minimax algorithm on the nodes
             Node node;
             int score;
             foreach (string move in moves)
@@ -52,7 +52,7 @@ namespace Tak.AI
             if (depth <= 0)
                 return node.score;
 
-            // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
+            // Recursively find the best move by using the minimax algorithm on the nodes
             Node newNode;
             int score = int.MaxValue;
             foreach (string move in node.moves)
@@ -71,7 +71,7 @@ namespace Tak.AI
             if (depth <= 0)
                 return node.score;
 
-            // Recursively find the best move by using the minimax algorithm (iterative deepening) on the nodes
+            // Recursively find the best move by using the minimax algorithm on the nodes
             Node newNode;
             int score = int.MinValue;
             foreach (string move in node.moves)
