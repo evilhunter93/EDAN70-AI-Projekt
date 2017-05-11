@@ -36,7 +36,7 @@ namespace Tak.Game
             switch (playerType.ToLower())
             {
                 case "human":
-                    return new HumanPlayer(board, Colour.White);
+                    return new HumanPlayer(board, colour);
 
                 case "minimaxai":
                 case "minmaxai":
