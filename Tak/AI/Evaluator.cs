@@ -49,9 +49,9 @@ namespace Tak.AI
             return score;
         }
 
-        public static int EvaluateGameState(GameBoard board, Colour turn)
+        public static int EvaluateGameState(GameState gs, Colour turn)
         {
-            GameState gs = board.GameState;
+
             if (gs != GameState.InProgress && gs != GameState.Tie)
             {
                 if (((gs == GameState.BF || gs == GameState.BR) && turn == Colour.Black) ||

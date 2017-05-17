@@ -106,12 +106,14 @@ namespace Tak.AI
             internal string move;
             internal IEnumerable<string> moves;
             internal Colour player;
-            internal bool end = false;
+            internal bool end;
 
             internal Node(GameBoard nBoard, string nMove, Colour player)
             {
                 board = nBoard;
+                score = 0;
                 move = nMove;
+                end = false;
                 Interpreter.Input(move, board);
                 this.player = player;
                 board.EndTurn();
@@ -121,14 +123,14 @@ namespace Tak.AI
 
             private void Evaluate()
             {
-                score = Evaluator.EvaluateGameState(board, player);
-                if (score == 0)
+                end = board.GameState != GameState.InProgress;
+                if (!end)
                 {
                     score += Evaluator.EvaluateStack(board, player);
                     score += Evaluator.EvaluateTopPiece(board, player);
                 }
                 else
-                    end = true;
+                    score = Evaluator.EvaluateGameState(board.GameState, player);
             }
         }
     }
