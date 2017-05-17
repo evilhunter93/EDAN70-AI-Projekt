@@ -42,7 +42,7 @@ namespace Tak.Game
                 case "minmaxai":
                 case "minimax":
                 case "minmax":
-                    IAI ai = new MiniMaxAI(board, depth);
+                    IAI ai = new MiniMaxAI(board, colour, depth);
                     return new AIPlayer(board, colour, ai);
 
                 case "learningai":

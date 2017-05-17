@@ -12,11 +12,13 @@ namespace Tak.AI
     {
         private GameBoard board; // §readonly, rename to something fancy
         private int depth;
+        private Colour player;
 
-        public MiniMaxAI(GameBoard board, int depth = 0)
+        public MiniMaxAI(GameBoard board, Colour player, int depth = 0)
         {
             this.board = board;
             this.depth = depth;
+            this.player = player;
         }
 
         public string BestMove()
@@ -34,8 +36,12 @@ namespace Tak.AI
             int score;
             foreach (string move in moves)
             {
-                node = new Node(board.Clone(), move);
-                score = Min(node, depth - 1, alpha, beta);
+                node = new Node(board.Clone(), move, player);
+                if (!node.end)
+                    score = Min(node, depth - 1, alpha, beta);
+                else
+                    score = node.score;
+
                 if (score > alpha)
                 {
                     alpha = score;
@@ -57,8 +63,12 @@ namespace Tak.AI
             int score = int.MaxValue;
             foreach (string move in node.moves)
             {
-                newNode = new Node(node.board.Clone(), move);
-                score = Math.Min(score, Max(newNode, depth - 1, alpha, beta));
+                newNode = new Node(node.board.Clone(), move, player);
+                if (!node.end)
+                    score = Math.Min(score, Max(newNode, depth - 1, alpha, beta));
+                else
+                    score = node.score;
+
                 if (score <= alpha)
                     return score;
                 beta = Math.Min(beta, score);
@@ -76,8 +86,12 @@ namespace Tak.AI
             int score = int.MinValue;
             foreach (string move in node.moves)
             {
-                newNode = new Node(node.board.Clone(), move);
-                score = Math.Max(score, Min(newNode, depth - 1, alpha, beta));
+                newNode = new Node(node.board.Clone(), move, player);
+                if (!node.end)
+                    score = Math.Max(score, Min(newNode, depth - 1, alpha, beta));
+                else
+                    score = node.score;
+
                 if (score >= beta)
                     return score;
                 alpha = Math.Max(alpha, score);
@@ -91,14 +105,15 @@ namespace Tak.AI
             internal int score;
             internal string move;
             internal IEnumerable<string> moves;
-            internal Colour turn;
+            internal Colour player;
+            internal bool end = false;
 
-            internal Node(GameBoard nBoard, string nMove)
+            internal Node(GameBoard nBoard, string nMove, Colour player)
             {
                 board = nBoard;
                 move = nMove;
                 Interpreter.Input(move, board);
-                turn = board.Turn;
+                this.player = player;
                 board.EndTurn();
                 moves = board.ValidMoves(board.Turn);
                 Evaluate();
@@ -106,12 +121,14 @@ namespace Tak.AI
 
             private void Evaluate()
             {
-                score = Evaluator.EvaluateGameState(board, turn);
+                score = Evaluator.EvaluateGameState(board, player);
                 if (score == 0)
                 {
-                    score += Evaluator.EvaluateStack(board, turn);
-                    score += Evaluator.EvaluateTopPiece(board, turn);
+                    score += Evaluator.EvaluateStack(board, player);
+                    score += Evaluator.EvaluateTopPiece(board, player);
                 }
+                else
+                    end = true;
             }
         }
     }
