@@ -21,7 +21,7 @@ namespace Tak
             //    Console.Write(i + " ");
 
             // Players: Human, MiniMaxAI, LearningAI
-            TakGame game = new TakGame(5, "Human", "MiniMaxAI", 3);
+            TakGame game = new TakGame(5, "Human", "MiniMaxAI", 2);
             game.Run();
 
             Console.Write("\nPress Enter to exit...");

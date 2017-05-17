@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AI\IAI.cs" />
     <Compile Include="AI\Evaluator.cs" />
+    <Compile Include="AI\MonteCarloAI.cs" />
     <Compile Include="AI\MiniMaxAI.cs" />
     <Compile Include="Exceptions\IllegalInputException.cs" />
     <Compile Include="Game\AIPlayer.cs" />
