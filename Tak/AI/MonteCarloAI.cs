@@ -96,7 +96,7 @@ namespace Tak.AI
 
         private string MinMax(int depth, int alpha = int.MinValue, int beta = int.MaxValue)
         {
-
+            throw new NotImplementedException();
         }
 
         private int Min(Node node, int depth, int alpha, int beta)
