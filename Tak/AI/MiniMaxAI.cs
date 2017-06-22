@@ -126,11 +126,13 @@ namespace Tak.AI
                 end = board.GameState != GameState.InProgress;
                 if (!end)
                 {
-                    score += Evaluator.EvaluateStack(board, player);
-                    score += Evaluator.EvaluateTopPiece(board, player);
+                    score += Evaluator.StackScore(board, player);
+                    score += Evaluator.TopPieceScore(board, player);
+                    score += Evaluator.RoadScore(board, player);
+                    score += Evaluator.ConnectedComponentScore(board, player);
                 }
                 else
-                    score = Evaluator.EvaluateGameState(board.GameState, player);
+                    score = Evaluator.GameStateScore(board.GameState, player);
             }
         }
     }

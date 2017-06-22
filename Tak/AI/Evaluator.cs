@@ -9,7 +9,7 @@ namespace Tak.AI
 {
     class Evaluator
     {
-        public static int EvaluateStack(GameBoard board, Colour turn)
+        public static int StackScore(GameBoard board, Colour player)
         {
             int score = 0;
             StoneStack[,] stacks = board.StacksReference;
@@ -17,7 +17,7 @@ namespace Tak.AI
             {
                 if (stack.Count > 0)
                 {
-                    if (stack.Owner == turn)
+                    if (stack.Owner == player)
                     {
                         score += stack.Count;
                     }
@@ -30,13 +30,13 @@ namespace Tak.AI
             return score;
         }
 
-        public static int EvaluateTopPiece(GameBoard board, Colour turn)
+        public static int TopPieceScore(GameBoard board, Colour player)
         {
             int score = 0;
             StoneStack[,] stacks = board.StacksReference;
             foreach (StoneStack stack in stacks)
                 if (stack.Count > 0)
-                    if (stack.Owner == turn)
+                    if (stack.Owner == player)
                         if (stack.Top.Road)
                             if (stack.Top is Flatstone)
                                 score += 3;
@@ -49,13 +49,24 @@ namespace Tak.AI
             return score;
         }
 
-        public static int EvaluateGameState(GameState gs, Colour turn)
+        public static int RoadScore(GameBoard board, Colour player)
+        {
+
+            return 0;
+        }
+
+        public static int ConnectedComponentScore(GameBoard board, Colour player)
+        {
+            return 0;
+        }
+
+        public static int GameStateScore(GameState gs, Colour player)
         {
 
             if (gs != GameState.InProgress && gs != GameState.Tie)
             {
-                if (((gs == GameState.BF || gs == GameState.BR) && turn == Colour.Black) ||
-                    ((gs == GameState.WF || gs == GameState.WR) && turn == Colour.White))
+                if (((gs == GameState.BF || gs == GameState.BR) && player == Colour.Black) ||
+                    ((gs == GameState.WF || gs == GameState.WR) && player == Colour.White))
                     return int.MaxValue;
                 else
                     return int.MinValue;
