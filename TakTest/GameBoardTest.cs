@@ -58,6 +58,7 @@ namespace TakTests
                         board.PlaceStone(i, j, new Flatstone(Colour.White));
                     else
                         board.PlaceStone(i, j, new Flatstone(Colour.Black));
+            board.PlaceStone(0, 0, new Capstone(Colour.White), true);
             board.EndTurn();
             Assert.AreEqual(board.GameState, GameState.WF);
         }
@@ -78,12 +79,26 @@ namespace TakTests
         }
 
         [TestMethod]
-        public void RoadVictorySimple()
+        public void RoadVictoryHorizontal()
         {
             int size = 5;
             GameBoard board = new GameBoard(size);
+            board.PlaceStone(1, 0, new Flatstone(Colour.White));
+            board.PlaceStone(1, 1, new Flatstone(Colour.White));
             for (int i = 0; i < size; i++)
-                board.PlaceStone(i, 0, new Flatstone(Colour.White));
+                board.PlaceStone(i, 2, new Flatstone(Colour.White));
+            board.EndTurn();
+            Assert.AreEqual(board.GameState, GameState.WR);
+        }
+
+        [TestMethod]
+        public void RoadVictoryVertical()
+        {
+            int size = 5;
+            GameBoard board = new GameBoard(size);
+            board.PlaceStone(0, 1, new Flatstone(Colour.White));
+            for (int i = 0; i < size; i++)
+                board.PlaceStone(1, i, new Flatstone(Colour.White));
             board.EndTurn();
             Assert.AreEqual(board.GameState, GameState.WR);
         }
