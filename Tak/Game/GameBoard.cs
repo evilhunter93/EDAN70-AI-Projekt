@@ -138,13 +138,13 @@ namespace Tak.Game
         {
             if (!ValidIndex(x, y))
                 throw new IllegalMoveException("\nIndex [" + x + ", " + y + "] is out of bounds");
+            if (stacks[x, y].Count < 1)
+                throw new IllegalMoveException("\nStack is empty.");
             if (!CurrentPlayerIsOwner(x, y))
                 throw new IllegalMoveException("\nCurrent player does not control the stack at [" + x + ", " + y + "].");
 
             if (amount == UNSPECIFIED)
             {
-                if (stacks[x, y].Count < 1)
-                    throw new IllegalMoveException("\nCount < 1");
                 if (stacks[x, y].Count > 1)
                     throw new IllegalMoveException("\nUnspecified number of stones to pick up, but stack contains more than one");
                 else
@@ -325,16 +325,17 @@ namespace Tak.Game
         private void UpdateGameState()
         {
             state = Search();
-            if (state == GameState.InProgress && FullBoard())
+            if (state == GameState.InProgress && (FullBoard() || whiteStones.Empty() || blackStones.Empty()))
             {
                 int nbrWhite = 0, nbrBlack = 0;
                 for (int i = 0; i < size; i++)
                     for (int j = 0; j < size; j++)
                     {
-                        if (stacks[i, j].Owner == Colour.Black)
-                            nbrBlack++;
-                        else
-                            nbrWhite++;
+                        if (stacks[i, j].Top is Flatstone)
+                            if (stacks[i, j].Owner == Colour.Black)
+                                nbrBlack++;
+                            else
+                                nbrWhite++;
                     }
 
                 if (nbrWhite > nbrBlack)
@@ -348,16 +349,17 @@ namespace Tak.Game
 
         private GameState Search()
         {
-            visited = new bool[size, size];
-
             bool WR = false, BR = false;
+
             for (int i = 0; i < size; i++)
             {
+                visited = new bool[size, size];
                 if (ExploreRoad(0, i, 0, i))
                 {
                     WR = WR || (stacks[0, i].Owner == Colour.White);
                     BR = BR || (stacks[0, i].Owner == Colour.Black);
                 }
+                visited = new bool[size, size];
                 if (ExploreRoad(i, 0, i, 0))
                 {
                     WR = WR || (stacks[i, 0].Owner == Colour.White);
@@ -426,6 +428,47 @@ namespace Tak.Game
             return true;
         }
 
+        public int LargestConnectedComponent(Colour player)
+        {
+            int largest = 0;
+            int current;
+            visited = new bool[size, size];
+
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                {
+                    current = ExploreComponent(i, j, player);
+                    if (current > largest)
+                        largest = current;
+                }
+            return largest;
+        }
+
+        private int ExploreComponent(int x, int y, Colour player)
+        {
+            if (x < 0 || x >= size || y < 0 || y >= size)
+                return 0;
+
+            if (stacks[x, y].Count == 0)
+                return 0;
+
+            if (player != stacks[x, y].Owner)
+                return 0;
+
+            if (visited[x, y])
+                return 0;
+
+            if (!stacks[x, y].Top.Road)
+                return 0;
+
+            visited[x, y] = true;
+
+            return 1 + ExploreComponent(x + 1, y, player)
+                     + ExploreComponent(x, y + 1, player)
+                     + ExploreComponent(x - 1, y, player)
+                     + ExploreComponent(x, y - 1, player);
+        }
+
         private class StoneReserve
         {
             private int flatstones;
@@ -459,6 +502,11 @@ namespace Tak.Game
             internal StoneReserve Clone()
             {
                 return new StoneReserve(this);
+            }
+
+            internal bool Empty()
+            {
+                return flatstones == 0 && capstones == 0;
             }
 
             internal bool CheckReserve(Stone stone)
