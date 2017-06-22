@@ -24,6 +24,8 @@ namespace Tak.Game
         private string PromptInput()
         {
             Console.WriteLine("\n" + colourText + " turn!");
+            Console.WriteLine("Connected Component: " + board.LargestConnectedComponent(colour));
+            Console.WriteLine("GameState: " + (board.GameState == GameState.InProgress ? "In progress" : "Game over"));
             Console.Write("Enter move: ");
             return Console.ReadLine();
         }
