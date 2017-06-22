@@ -57,12 +57,12 @@ namespace Tak.AI
 
         public static int ConnectedComponentScore(GameBoard board, Colour player)
         {
+
             return 0;
         }
 
         public static int GameStateScore(GameState gs, Colour player)
         {
-
             if (gs != GameState.InProgress && gs != GameState.Tie)
             {
                 if (((gs == GameState.BF || gs == GameState.BR) && player == Colour.Black) ||
