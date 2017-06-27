@@ -51,8 +51,7 @@ namespace Tak.AI
 
         public static int RoadScore(GameBoard board, Colour player)
         {
-
-            return 0;
+            return board.BestRoad(player);
         }
 
         public static int ConnectedComponentScore(GameBoard board, Colour player)

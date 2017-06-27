@@ -467,7 +467,10 @@ namespace Tak.Game
             if (visited[x, y])
                 return 0;
 
-            if (!stacks[x, y].Top.Road)
+            if (stacks[x, y].Count == 0)
+                return 0;
+
+            if (player != stacks[x, y].Owner)
                 return 0;
 
             visited[x, y] = true;
@@ -476,6 +479,72 @@ namespace Tak.Game
                      + ExploreComponent(x, y + 1, player)
                      + ExploreComponent(x - 1, y, player)
                      + ExploreComponent(x, y - 1, player);
+        }
+
+        public int BestRoad(Colour player)
+        {
+            int bestScore;
+            Boolean[,] visited = new Boolean[size, size];
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (!visited[i, j])
+                    {
+                        int[] index = new int[] { i, i, j, j };
+                        bestScore = ScoreRoad(i, j, visited, index, player);
+                    }
+                }
+            }
+        }
+
+        private int ScoreRoad(int i, int j, Boolean[,] visited, int[] index, Colour player)
+        {
+            if (visited[i, j] || i < 0 || i >= size || j < 0 || j >= size)
+                return 0;
+
+            if (stacks[i, j].Count == 0)
+                return 0;
+
+            if (player != stacks[i, j].Owner)
+                return 0;
+
+            if (player != stacks[i, j].Owner)
+                return 0;
+
+            visited[i, j] = true;
+
+            if (i < index[0])
+                index[0] = i;
+
+            if (i > index[1])
+                index[1] = i;
+
+            if (j < index[2])
+                index[2] = j;
+
+            if (j > index[3])
+                index[3] = j;
+
+            var horScore = index[1] - index[0];
+            var verScore = index[3] - index[2];
+            var currScore = (verScore > horScore) ? verScore : horScore;
+            currScore = 1 > currScore ? 1 : currScore;
+
+            var scores = new int[3];
+            scores[0] = ScoreRoad(i--, j, visited, index, player);
+            scores[1] = ScoreRoad(i++, j, visited, index, player);
+            scores[2] = ScoreRoad(i, j--, visited, index, player);
+            scores[3] = ScoreRoad(i, j++, visited, index, player);
+
+            var maxScore = 0;
+            for (int m = 0; m < 4; m++)
+            {
+                if (maxScore < scores[m])
+                    maxScore = scores[m];
+            }
+            maxScore = maxScore > currScore ? maxScore : currScore;
+            return maxScore;
         }
 
         private class StoneReserve
