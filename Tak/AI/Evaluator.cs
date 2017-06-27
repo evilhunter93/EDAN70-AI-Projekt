@@ -57,8 +57,7 @@ namespace Tak.AI
 
         public static int ConnectedComponentScore(GameBoard board, Colour player)
         {
-
-            return 0;
+            return board.LargestConnectedComponent(player);
         }
 
         public static int GameStateScore(GameState gs, Colour player)
