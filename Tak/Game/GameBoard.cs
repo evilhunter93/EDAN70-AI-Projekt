@@ -54,7 +54,17 @@ namespace Tak.Game
                 }
                 return tempStacks;
             }
-            set { stacks = value; }
+            set
+            {
+                stacks = new StoneStack[size, size];
+                for (int x = 0; x < size; x++)
+                {
+                    for (int y = 0; y < size; y++)
+                    {
+                        stacks[x, y] = ObjectExtensions.Copy(value[x, y]);
+                    }
+                }
+            }
         }
 
         public bool Test
