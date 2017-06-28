@@ -483,7 +483,7 @@ namespace Tak.Game
 
         public int BestRoad(Colour player)
         {
-            int bestScore;
+            int bestScore = 0;
             Boolean[,] visited = new Boolean[size, size];
             for (int i = 0; i < size; i++)
             {
@@ -496,6 +496,7 @@ namespace Tak.Game
                     }
                 }
             }
+            return bestScore;
         }
 
         private int ScoreRoad(int i, int j, Boolean[,] visited, int[] index, Colour player)
