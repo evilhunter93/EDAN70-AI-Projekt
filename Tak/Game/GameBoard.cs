@@ -31,6 +31,7 @@ namespace Tak.Game
         private StoneReserve blackStones;
         private bool test;
 
+        public int Size { get { return size; } }
         public Colour Turn { get { return turn; } set { turn = value; } }
         public GameState GameState { get { return state; } }
 
