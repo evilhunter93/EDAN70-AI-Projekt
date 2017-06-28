@@ -467,10 +467,7 @@ namespace Tak.Game
             if (visited[x, y])
                 return 0;
 
-            if (stacks[x, y].Count == 0)
-                return 0;
-
-            if (player != stacks[x, y].Owner)
+            if (!stacks[x, y].Top.Road)
                 return 0;
 
             visited[x, y] = true;
@@ -505,9 +502,6 @@ namespace Tak.Game
                 return 0;
 
             if (stacks[i, j].Count == 0)
-                return 0;
-
-            if (player != stacks[i, j].Owner)
                 return 0;
 
             if (player != stacks[i, j].Owner)
