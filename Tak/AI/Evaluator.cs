@@ -18,13 +18,7 @@ namespace Tak.AI
                 if (stack.Count > 0)
                 {
                     if (stack.Owner == player)
-                    {
                         score += stack.Count;
-                    }
-                    else
-                    {
-                        score -= stack.Count;
-                    }
                 }
             }
             return score;
@@ -44,8 +38,6 @@ namespace Tak.AI
                                 score += 1;
                         else
                             score += 2;
-                    else
-                        score -= 1;
             return score;
         }
 
