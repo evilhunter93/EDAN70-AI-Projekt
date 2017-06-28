@@ -481,30 +481,35 @@ namespace Tak.Game
         public int BestRoad(Colour player)
         {
             int bestScore = 0;
-            Boolean[,] visited = new Boolean[size, size];
+            int currScore = 0;
+            bool[,] visited = new bool[size, size];
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    if (!visited[i, j])
-                    {
-                        int[] index = new int[] { i, i, j, j };
-                        bestScore = ScoreRoad(i, j, visited, index, player);
-                    }
+                    int[] index = new int[] { i, i, j, j };
+                    currScore = ScoreRoad(i, j, visited, index, player);
+                    bestScore = bestScore > currScore ? bestScore : currScore;
                 }
             }
             return bestScore;
         }
 
-        private int ScoreRoad(int i, int j, Boolean[,] visited, int[] index, Colour player)
+        private int ScoreRoad(int i, int j, bool[,] visited, int[] index, Colour player)
         {
-            if (visited[i, j] || i < 0 || i >= size || j < 0 || j >= size)
+            if (i < 0 || i >= size || j < 0 || j >= size)
+                return 0;
+
+            if (visited[i, j])
                 return 0;
 
             if (stacks[i, j].Count == 0)
                 return 0;
 
             if (player != stacks[i, j].Owner)
+                return 0;
+
+            if (!stacks[i, j].Top.Road)
                 return 0;
 
             visited[i, j] = true;
@@ -521,19 +526,18 @@ namespace Tak.Game
             if (j > index[3])
                 index[3] = j;
 
-            var horScore = index[1] - index[0];
-            var verScore = index[3] - index[2];
+            var horScore = index[1] - index[0] + 1;
+            var verScore = index[3] - index[2] + 1;
             var currScore = (verScore > horScore) ? verScore : horScore;
-            currScore = 1 > currScore ? 1 : currScore;
 
-            var scores = new int[3];
-            scores[0] = ScoreRoad(i--, j, visited, index, player);
-            scores[1] = ScoreRoad(i++, j, visited, index, player);
-            scores[2] = ScoreRoad(i, j--, visited, index, player);
-            scores[3] = ScoreRoad(i, j++, visited, index, player);
+            var scores = new int[4];
+            scores[0] = ScoreRoad(i - 1, j, visited, index, player);
+            scores[1] = ScoreRoad(i + 1, j, visited, index, player);
+            scores[2] = ScoreRoad(i, j - 1, visited, index, player);
+            scores[3] = ScoreRoad(i, j + 1, visited, index, player);
 
             var maxScore = 0;
-            for (int m = 0; m < 4; m++)
+            for (int m = 0; m < scores.Count(); m++)
             {
                 if (maxScore < scores[m])
                     maxScore = scores[m];
