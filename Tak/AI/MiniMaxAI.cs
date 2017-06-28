@@ -28,10 +28,10 @@ namespace Tak.AI
 
         private string MinMax(int depth, int alpha = int.MinValue, int beta = int.MaxValue)
         {
-            string bestMove = null;
+            string bestMove = "hej";
             GameBoard cBoard = board.Clone();
             IEnumerable<string> moves = cBoard.ValidMoves(cBoard.Turn);
-
+            Console.WriteLine("nbr of moves: " + moves.Count());
             // Recursively find the best move by using the minimax algorithm on the nodes
             Node node;
             int score;
@@ -43,13 +43,11 @@ namespace Tak.AI
                 else
                     score = node.score;
 
-                if (score > alpha)
+                if (score > alpha || alpha == int.MinValue)
                 {
                     alpha = score;
                     bestMove = node.move;
                 }
-                if (score >= beta)
-                    break;
             }
             return bestMove;
         }
