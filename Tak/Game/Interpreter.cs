@@ -14,6 +14,9 @@ namespace Tak.Game
 
         public static void Input(string input, GameBoard board)
         {
+            if (input == null)
+                throw new IllegalInputException("Input can not be null.");
+
             if (input.ToLower() == "exit")
                 Environment.Exit(0);
 
