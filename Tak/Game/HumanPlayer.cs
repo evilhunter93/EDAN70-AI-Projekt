@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tak.AI;
 
 namespace Tak.Game
 {
@@ -23,9 +24,15 @@ namespace Tak.Game
 
         private string PromptInput()
         {
-            Console.WriteLine("\n" + colourText + " turn!");
-            Console.WriteLine("Connected Component: " + board.LargestConnectedComponent(colour));
+#if DEBUG
+            Console.WriteLine("- DEBUG INFO -");
+            Console.WriteLine("Road score: " + Evaluator.RoadScore(board, colour));
+            Console.WriteLine("Connected Component: " + Evaluator.ConnectedComponentScore(board, colour));
             Console.WriteLine("GameState: " + (board.GameState == GameState.InProgress ? "In progress" : "Game over"));
+            Console.WriteLine("Test: " + (board.Test ? "True" : "False"));
+            Console.WriteLine("Proximity score: " + Evaluator.ProximityScore(board, colour));
+#endif
+            Console.WriteLine("\n" + colourText + " turn!");
             Console.Write("Enter move: ");
             return Console.ReadLine();
         }
