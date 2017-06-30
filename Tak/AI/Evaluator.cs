@@ -54,12 +54,115 @@ namespace Tak.AI
 
         public static int RoadScore(GameBoard board, Colour player)
         {
-            return board.BestRoad(player);
+            int bestScore = 0;
+            int currScore = 0;
+            int size = board.Size;
+            bool[,] visited = new bool[size, size];
+            StoneStack[,] stacks = board.StacksReference;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    int[] index = new int[] { i, i, j, j };
+                    currScore = ScoreRoad(i, j, size, visited, stacks, index, player);
+                    bestScore = bestScore > currScore ? bestScore : currScore;
+                }
+            }
+            return bestScore;
+        }
+
+        private static int ScoreRoad(int i, int j, int size, bool[,] visited, StoneStack[,] stacks, int[] index, Colour player)
+        {
+            if (i < 0 || i >= size || j < 0 || j >= size)
+                return 0;
+
+            if (visited[i, j])
+                return 0;
+
+            if (stacks[i, j].Count == 0)
+                return 0;
+
+            if (player != stacks[i, j].Owner)
+                return 0;
+
+            if (!stacks[i, j].Top.Road)
+                return 0;
+
+            visited[i, j] = true;
+
+            if (i < index[0])
+                index[0] = i;
+
+            if (i > index[1])
+                index[1] = i;
+
+            if (j < index[2])
+                index[2] = j;
+
+            if (j > index[3])
+                index[3] = j;
+
+            int horScore = index[1] - index[0] + 1;
+            int verScore = index[3] - index[2] + 1;
+            int currScore = (verScore > horScore) ? verScore : horScore;
+
+            int[] scores = new int[4];
+            scores[0] = ScoreRoad(i - 1, j, size, visited, stacks, index, player);
+            scores[1] = ScoreRoad(i + 1, j, size, visited, stacks, index, player);
+            scores[2] = ScoreRoad(i, j - 1, size, visited, stacks, index, player);
+            scores[3] = ScoreRoad(i, j + 1, size, visited, stacks, index, player);
+
+            int maxScore = 0;
+            for (int m = 0; m < scores.Count(); m++)
+            {
+                if (maxScore < scores[m])
+                    maxScore = scores[m];
+            }
+            maxScore = maxScore > currScore ? maxScore : currScore;
+            return maxScore;
         }
 
         public static int ConnectedComponentScore(GameBoard board, Colour player)
         {
-            return board.LargestConnectedComponent(player);
+            int largest = 0;
+            int current;
+            int size = board.Size;
+            bool[,] visited = new bool[size, size];
+            StoneStack[,] stacks = board.StacksReference;
+
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                {
+                    current = ExploreComponent(i, j, size, visited, stacks, player);
+                    if (current > largest)
+                        largest = current;
+                }
+            return largest;
+        }
+
+        private static int ExploreComponent(int x, int y, int size, bool[,] visited, StoneStack[,] stacks, Colour player)
+        {
+            if (x < 0 || x >= size || y < 0 || y >= size)
+                return 0;
+
+            if (stacks[x, y].Count == 0)
+                return 0;
+
+            if (player != stacks[x, y].Owner)
+                return 0;
+
+            if (visited[x, y])
+                return 0;
+
+            if (!stacks[x, y].Top.Road)
+                return 0;
+
+            visited[x, y] = true;
+
+            return 1 + ExploreComponent(x + 1, y, size, visited, stacks, player)
+                     + ExploreComponent(x, y + 1, size, visited, stacks, player)
+                     + ExploreComponent(x - 1, y, size, visited, stacks, player)
+                     + ExploreComponent(x, y - 1, size, visited, stacks, player);
         }
 
         public static int ProximityScore(GameBoard board, Colour player)
