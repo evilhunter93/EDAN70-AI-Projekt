@@ -209,7 +209,7 @@ namespace Tak.AI
             visited[i, j] = true;
 
             Queue<Position> q = new Queue<Position>();
-            EnqueueDirections(q, new Position(i, j, 0));
+            EnqueueAdjacent(q, new Position(i, j, 0));
 
             Position p;
             while (q.Count > 0)
@@ -227,13 +227,13 @@ namespace Tak.AI
 
                 visited[p.i, p.j] = true;
 
-                EnqueueDirections(q, p);
+                EnqueueAdjacent(q, p);
             }
 
             return 2 * size;
         }
 
-        private static void EnqueueDirections(Queue<Position> q, Position p)
+        private static void EnqueueAdjacent(Queue<Position> q, Position p)
         {
             q.Enqueue(new Position(p.i - 1, p.j, p.distance + 1));
             q.Enqueue(new Position(p.i + 1, p.j, p.distance + 1));
