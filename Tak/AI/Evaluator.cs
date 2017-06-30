@@ -9,6 +9,17 @@ namespace Tak.AI
 {
     class Evaluator
     {
+        private class Position
+        {
+            internal int i, j, distance;
+            internal Position(int i, int j, int distance)
+            {
+                this.i = i;
+                this.j = j;
+                this.distance = distance;
+            }
+        }
+
         public static int StackScore(GameBoard board, Colour player)
         {
             int score = 0;
@@ -53,12 +64,12 @@ namespace Tak.AI
 
         public static int ProximityScore(GameBoard board, Colour player)
         {
-            // FIXME: score should benefit short distances and many pieces
             int size = board.Size;
+            int maxDistance = size * 2;
+            int nbrPieces = 0;
             StoneStack stack;
             int score = 0;
             StoneStack[,] stacks = board.StacksReference;
-            bool[,] visited = new bool[size, size];
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < size; j++)
                 {
@@ -67,12 +78,13 @@ namespace Tak.AI
                         if (stack.Owner == player)
                             if (stack.Top.Road)
                             {
-                                visited = new bool[size, size];
-                                score += DistanceToNearest(i, j, stacks, size, visited, player);
+                                nbrPieces++;
+                                score += maxDistance - DistanceToNearest(i, j, stacks, size, player);
                             }
                 }
+            //score = nbrPieces > 0 ? score / nbrPieces : 0;
 
-            return -score;
+            return score;
         }
 
         public static int GameStateScore(GameState gs, Colour player)
@@ -88,28 +100,42 @@ namespace Tak.AI
             return 0;
         }
 
-        private static int DistanceToNearest(int i, int j, StoneStack[,] stacks, int size, bool[,] visited, Colour player)
+        private static int DistanceToNearest(int i, int j, StoneStack[,] stacks, int size, Colour player)
         {
-            if (i < 0 || i >= size || j < 0 || j >= size)
-                return int.MaxValue;
-
-            if (visited[i, j])
-                return int.MaxValue;
-
+            bool[,] visited = new bool[size, size];
             visited[i, j] = true;
 
-            if (stacks[i, j].Count > 0)
-                if (stacks[i, j].Owner == player)
-                    if (stacks[i, j].Top.Road)
-                        return 1;
+            Queue<Position> q = new Queue<Position>();
+            EnqueueDirections(q, new Position(i, j, 0));
 
-            int[] distances = new int[4];
-            distances[0] = DistanceToNearest(i - 1, j, stacks, size, visited, player);
-            distances[1] = DistanceToNearest(i + 1, j, stacks, size, visited, player);
-            distances[2] = DistanceToNearest(i, j - 1, stacks, size, visited, player);
-            distances[3] = DistanceToNearest(i, j + 1, stacks, size, visited, player);
+            Position p;
+            while (q.Count > 0)
+            {
+                p = q.Dequeue();
+                if (p.i < 0 || p.i >= size || p.j < 0 || p.j >= size)
+                    continue;
+                if (visited[p.i, p.j])
+                    continue;
 
-            return 1 + distances.Min();
+                if (stacks[p.i, p.j].Count > 0)
+                    if (stacks[p.i, p.j].Owner == player)
+                        if (stacks[p.i, p.j].Top.Road)
+                            return p.distance;
+
+                visited[p.i, p.j] = true;
+
+                EnqueueDirections(q, p);
+            }
+
+            return 2 * size;
+        }
+
+        private static void EnqueueDirections(Queue<Position> q, Position p)
+        {
+            q.Enqueue(new Position(p.i - 1, p.j, p.distance + 1));
+            q.Enqueue(new Position(p.i + 1, p.j, p.distance + 1));
+            q.Enqueue(new Position(p.i, p.j - 1, p.distance + 1));
+            q.Enqueue(new Position(p.i, p.j + 1, p.distance + 1));
         }
     }
 }
