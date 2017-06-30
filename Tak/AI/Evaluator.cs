@@ -82,7 +82,7 @@ namespace Tak.AI
                                 score += maxDistance - DistanceToNearest(i, j, stacks, size, player);
                             }
                 }
-            //score = nbrPieces > 0 ? score / nbrPieces : 0;
+            score = nbrPieces > 0 ? score / nbrPieces : 0;
 
             return score;
         }
