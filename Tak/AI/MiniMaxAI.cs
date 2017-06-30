@@ -129,6 +129,7 @@ namespace Tak.AI
                     score += Evaluator.TopPieceScore(board, player);
                     score += Evaluator.RoadScore(board, player);
                     score += Evaluator.ConnectedComponentScore(board, player);
+                    score += Evaluator.ProximityScore(board, player);
                 }
                 else
                     score = Evaluator.GameStateScore(board.GameState, player);
