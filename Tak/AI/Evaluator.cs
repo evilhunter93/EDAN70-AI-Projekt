@@ -54,7 +54,7 @@ namespace Tak.AI
 
         public static int RoadScore(GameBoard board, Colour player)
         {
-            int bestScore = 0;
+            int score = 0;
             int currScore = 0;
             int size = board.Size;
             bool[,] visited = new bool[size, size];
@@ -65,10 +65,10 @@ namespace Tak.AI
                 {
                     int[] index = new int[] { i, i, j, j };
                     currScore = ScoreRoad(i, j, size, visited, stacks, index, player);
-                    bestScore = bestScore > currScore ? bestScore : currScore;
+                    score = score > currScore ? score : currScore;
                 }
             }
-            return bestScore;
+            return score;
         }
 
         private static int ScoreRoad(int i, int j, int size, bool[,] visited, StoneStack[,] stacks, int[] index, Colour player)
@@ -112,19 +112,19 @@ namespace Tak.AI
             scores[2] = ScoreRoad(i, j - 1, size, visited, stacks, index, player);
             scores[3] = ScoreRoad(i, j + 1, size, visited, stacks, index, player);
 
-            int maxScore = 0;
+            int score = 0;
             for (int m = 0; m < scores.Count(); m++)
             {
-                if (maxScore < scores[m])
-                    maxScore = scores[m];
+                if (score < scores[m])
+                    score = scores[m];
             }
-            maxScore = maxScore > currScore ? maxScore : currScore;
-            return maxScore;
+            score = score > currScore ? score : currScore;
+            return score;
         }
 
         public static int ConnectedComponentScore(GameBoard board, Colour player)
         {
-            int largest = 0;
+            int score = 0;
             int current;
             int size = board.Size;
             bool[,] visited = new bool[size, size];
@@ -134,10 +134,10 @@ namespace Tak.AI
                 for (int j = 0; j < size; j++)
                 {
                     current = ExploreComponent(i, j, size, visited, stacks, player);
-                    if (current > largest)
-                        largest = current;
+                    if (current > score)
+                        score = current;
                 }
-            return largest;
+            return score;
         }
 
         private static int ExploreComponent(int x, int y, int size, bool[,] visited, StoneStack[,] stacks, Colour player)
